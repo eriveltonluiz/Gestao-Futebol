@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Cadastro clientes</title>
+	<h:outputStylesheet library="css" name="estilo.css" id="cssSistema" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+</h:head>
+
+<h:body>
+	<ui:include src="/templates/menuPrincipal.xhtml" />
+	<h:form id="formCadCl" enctype="multipart/form-data"
+		styleClass="conteudo">
+		<p:growl id="msg" life="5500">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:fieldset legend="Cadastro"
+			style="text-align: left; border:1px solid #000">
+
+			<f:facet name="header">
+				<h1>Cadastro de clientes</h1>
+			</f:facet>
+
+			<p:panel styleClass="back">
+				<h:panelGrid columns="4" id="cadClientes">
+
+					<h:outputText value="ID:" style="margin-left: 150px" />
+					<p:inputText value="#{clienteBean.cliente.idCliente}"
+						readonly="true" disabled="true" />
+
+					<h:outputText value="Time:" style="margin-left: 150px" />
+					<p:inputText value="#{clienteBean.cliente.nomeTime}" />
+
+					<h:outputText value="Nome:" style="margin-left: 150px" />
+					<p:inputText value="#{clienteBean.cliente.nomeUser}" />
+
+					<h:outputText value="Plano horário:" style="margin-left: 75px" />
+					<p:inputText value="#{clienteBean.cliente.planoHorario}" />
+
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<p:column>
+						<p:fileUpload listener="#{clienteBean.handleFileUpload}"
+							mode="advanced" dragDropSupport="false" auto="true"
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/" style="margin-left: 30px"
+							invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)" />
+					</p:column>
+				</h:panelGrid>
+			</p:panel>
+
+			<br />
+
+			<h:panelGroup>
+				<center>
+					<p:commandButton value="Cadastrar" styleClass="btns"
+						update="formCadCl formCarou:carou" style="margin-right: 15px"
+						action="#{clienteBean.salvar}" />
+
+					<p:commandButton styleClass="btns" id="btnLimpar" value="limpar"
+						action="#{clienteBean.limparCampos}" update="formCadCl"
+						process="@this">
+						<p:ajax process="@this" update="formCadCl:cadClientes" />
+						<p:resetInput target="formCadCl" />
+					</p:commandButton>
+				</center>
+			</h:panelGroup>
+		</p:fieldset>
+		<br />
+	</h:form>
+
+	<h:form id="formCarou" styleClass="conteudo">
+		<p:carousel id="carou" value="#{clienteBean.clientes}" var="client"
+			itemStyle="text-align:center" headerText="Clientes cadastrados">
+			<p:panelGrid id="dgCarou" style="width:100%;margin:10px 0px"
+				columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+				<f:facet name="header">
+					<h:graphicImage value="#{client.fotoIconBase64}" width="35px"
+						height="40px" />
+				</f:facet>
+
+				<h:outputText value="ID:" />
+				<h:outputText value="#{client.idCliente}" />
+
+				<h:outputText value="Nome" />
+				<h:outputText value="#{client.nomeUser}" />
+
+				<h:outputText value="Time:" />
+				<h:outputText value="#{client.nomeTime}" />
+
+				<h:outputText value="Plano de horário:" />
+				<h:outputText value="#{client.planoHorario}" />
+
+				<f:facet name="footer">
+					<center>
+						<p:panelGrid columns="3">
+							<p:column headerText="Alterar" style="width:65px">
+								<p:commandLink id="btnEdit" styleClass="top"
+									actionListener="#{clienteBean.editar}">
+									<center>
+										<h:graphicImage id="imgEdit"
+											url="resources/img/icon-editar.png" width="40px"
+											height="40px" styleClass="images img-animated" />
+										<p:tooltip id="toolTipEdit" for="imgEdit"
+											value="Editar cliente" position="top" hideEffect="explode" />
+									</center>
+									<f:setPropertyActionListener value="#{client}"
+										target="#{clienteBean.cliente}" />
+									<p:ajax process="btnEdit" update="formCadCl" />
+								</p:commandLink>
+							</p:column>
+
+							<p:column headerText="Excluir" style="width:65px">
+								<p:commandLink id="btnDel" styleClass="top"
+									actionListener="#{clienteBean.deletar}">
+									<center>
+										<h:graphicImage id="imgDel"
+											url="resources/img/iconexcluir.png" width="40px"
+											height="40px" styleClass="images img-animated" />
+										<p:tooltip id="toolTipDel" for="imgDel"
+											value="Deletar cliente" position="top" hideEffect="explode" />
+									</center>
+									<f:setPropertyActionListener value="#{client}"
+										target="#{clienteBean.cliente}" />
+									<p:ajax process="btnDel" update="formCarou" />
+								</p:commandLink>
+							</p:column>
+
+							<p:column headerText="Selecionar" style="width:65px">
+								<p:commandLink id="btnSel" styleClass="top"
+									update="formCadCl formCarou:dialogPendencias"
+									action="#{clienteBean.acrescentarDados}"
+									oncomplete="PF('dlgPendencias').show()">
+									<center>
+										<h:graphicImage id="imgSel" url="resources/img/infor.png"
+											width="40px" height="40px" styleClass="images img-animated" />
+										<p:tooltip id="toolTipSel" for="imgSel"
+											value="Selecionar cliente" position="top"
+											hideEffect="explode" />
+									</center>
+									<f:setPropertyActionListener value="#{client}"
+										target="#{clienteBean.cliente}" />
+								</p:commandLink>
+							</p:column>
+						</p:panelGrid>
+					</center>
+				</f:facet>
+			</p:panelGrid>
+		</p:carousel>
+
+		<p:dialog widgetVar="dlgPendencias" id="dialogPendencias"
+			resizable="false" modal="true" width="700px" draggable="false"
+			height="500px" showEffect="explode" hideEffect="clip">
+			<p:ajax event="close" listener="#{clienteBean.limparCampos}"/>
+			<p:fieldset legend="Informações do cliente"
+				style="text-align: left; border:1px solid #000">
+
+				<p:panel styleClass="back">
+					<h:panelGrid columns="4" id="infoClientes">
+
+						<p:column>
+							<h:outputText value="Time:" />
+							<br />
+							<h:outputText value="#{clienteBean.cliente.nomeTime}"
+								style="margin-right: 50px; font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Cliente:" />
+							<br />
+							<h:outputText value="#{clienteBean.cliente.nomeUser}"
+								style="margin-right: 50px; font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Plano de horário:" />
+							<br />
+							<h:outputText value="#{clienteBean.cliente.planoHorario}" style="font-weight:bold"/>
+						</p:column>
+
+						<p:column>
+							<div style="margin-left: 25px">
+								<h:outputText value="Pendências de horário:" />
+								<br />
+								<h:outputText value="R$#{clienteBean.totalPend}0" style="font-weight:bold"/>
+							</div>
+						</p:column>
+						
+					</h:panelGrid>
+					<br />
+					<p:column>
+								<h:outputText value="Total Pago:" />
+								<h:outputText value="R$#{clienteBean.totalConfirmados}0" style="margin-left: 25px;font-weight:bold"/>
+						</p:column>
+				</p:panel>
+
+				<br />
+				<br />
+
+				<p:dataTable var="pend" value="#{clienteBean.pendencias}"
+					id="pendencias" style="text-align:center">
+					<f:facet name="header">
+						<h2>Lista de pendências</h2>
+					</f:facet>
+					<p:column headerText="Data Jogo">
+						<h:outputText value="#{pend.dataPag}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="UTC(GMT-0)" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Valor Pendente">
+						<h:outputText value="#{pend.valorPendente}" />
+					</p:column>
+
+					<p:column headerText="Valor Pago">
+						<h:outputText value="#{pend.valorPago}" />
+					</p:column>
+
+					<p:column headerText="Status" style="width:60px">
+						<p:commandLink oncomplete="PF('dialogConfirm').show()"
+							update="formCarou:dlgConfirm">
+							<center>
+								<p:graphicImage styleClass="images" library="img"
+									name="#{pend.status}" width="40px" height="35px" />
+							</center>
+							<f:setPropertyActionListener value="#{pend}"
+								target="#{clienteBean.pagMandante}" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+
+				<br />
+				<br />
+
+				<p:dataTable var="pend" value="#{clienteBean.confirmados}"
+					id="confirmados" style="text-align:center">
+					<f:facet name="header">
+						<h2>Histórico de confirmações</h2>
+					</f:facet>
+					<p:column headerText="Data Jogo">
+						<h:outputText value="#{pend.dataPag}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="UTC(GMT-0)" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Valor Pendente">
+						<h:outputText value="#{pend.valorPendente}" />
+					</p:column>
+
+					<p:column headerText="Valor Pago">
+						<h:outputText value="#{pend.valorPago}" />
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</p:dialog>
+
+		<p:dialog widgetVar="dialogConfirm" id="dlgConfirm" draggable="false"
+			showEffect="explode" hideEffect="clip" resizable="false" modal="true"
+			width="550px" height="300px" header="Confirmar pendência">
+			<p:panel>
+				<h:panelGrid columns="1" style="font-size:21px">
+
+					<p:row>
+						<p:outputLabel value="Valor à pagar(R$): " />
+						<p:inputNumber style="font-weight:bold" disabled="true"
+							value="#{clienteBean.pagMandante.valorPendente}" />
+					</p:row>
+				</h:panelGrid>
+			</p:panel>
+
+			<h1 style="color: red; font-weight: bold; font-style: italic">!Atenção</h1>
+			<h:outputText
+				value="Deseja realmente confirmar pagamento de pendência?"
+				style="font-weight:bold" />
+			<br />
+			<br />
+
+			<center>
+				<p:commandButton value="Confirmar"
+					action="#{clienteBean.manipularPendencia}" styleClass="btns"
+					process="@this"
+					update="formCarou:dialogPendencias formCarou:dlgConfirm" />
+
+				<p:commandButton style="margin-left:20px" value="Cancelar"
+					oncomplete="PF('dialogConfirm').hide()" styleClass="btns"
+					process="@this" />
+			</center>
+		</p:dialog>
+	</h:form>
+</h:body>
+
+</html>

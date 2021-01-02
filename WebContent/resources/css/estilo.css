@@ -1,0 +1,229 @@
+.btns {
+	margin-bottom: 15px;
+	text-align: center;
+	cursor: pointer;
+	transition: all 400ms ease;
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	border-radius: 0.4em;
+	box-shadow: 3px 3px 3px 1px #000;
+}
+
+.btns:hover {
+	background: rgba(0, 0, 0, 0);
+	border: 3px solid;
+	animation: bounce 1s;
+}
+
+.images {
+	cursor: pointer;
+	transition: all 400ms ease;
+	box-shadow: 3px 3px 3px 2px #000;
+	transition: box-shadow 0.2s ease, transform 0.2 ease;
+}
+
+.images:hover {
+	padding: 1px 8px;
+	height: 45px;
+	width: 45px;
+}
+
+.images:active {
+	box-shadow: 0 0 0 0 #000, inset 3px 3px 3px #000;
+	transform: translate(3px, 3px);
+}
+
+#j_idt4 {
+	text-align: center;
+}
+
+#j_idt4 div {
+	margin-bottom: 15px;
+}
+
+.back {
+	background: url("#{resource['img/abscinza.png']}") no-repeat scroll left
+		center;
+	background-size: 100%;
+}
+
+
+ @mixin center( $extend: true) {
+  @if $extend { 
+  @extend %center;	
+}
+
+@
+else {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+}
+.btnPrinc:before {
+	content: '';
+	display: block;
+	position: absolute;
+	background: #ccc;
+	width: 60px;
+	left: 0;
+	top: 0;
+	filter: blur(30px);
+	transform: translateX(50px) skewX(-15deg);
+}
+
+.btnPrinc:after {
+	content: '';
+	display: block;
+	position: absolute;
+    background: rgba(255,255,255,2.2);
+	width: 30px;
+	height: 100%;
+	left: 30px;
+	top: 0;
+	opacity: 0;
+	filter: blur(5px);
+	transform: translateX(-80px) skewX(-15deg);
+}
+
+.btnPrinc { 
+	width: 200px;
+	height: 50px;
+	border: 0;
+	font-size: 18px;
+	border-radius: 4px;
+	overflow: hidden;
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	transition: all 400ms ease;
+	box-shadow: 2px 2px 2px 2px #000;
+	transition: box-shadow 0.2s ease, transform 0.2 ease;
+}
+
+
+
+.btnPrinc:hover:before {
+	transform: translateX(200px) skewX(-15deg);
+	opacity: 0.6;
+	transition: .7s;
+}
+
+.btnPrinc:hover:after {
+	transform: translateX(165px) skewX(-15deg);
+	opacity: 1;
+	transition: .7s;
+}
+
+.btnPrinc:focus {
+	outline: 0;
+}
+
+.btnPrinc:active {
+	box-shadow: 0 0 0 0 #000, inset 3px 3px 3px #000;
+	transform: translate(8px, 8px);
+}
+
+.btnPrinc:hover {
+    background: linear-gradient(to right, #ffffff -12%, #333300 122%);
+	font-size:21px;
+	font-weight: bold;
+	font-style: italic;
+	cursor: pointer;
+	border: 2px solid;
+	width: 220px;
+	height: 60px;
+	font-family: inherit;
+}
+
+/* tesetCamp.xhtml*/ 
+
+.tamImg{
+	width: 25px;
+	height: 25px;
+}
+
+.pn:nth-of-type(odd) {
+	margin-left: 100px;
+}
+
+.pn {
+	background: url("#{resource['img/tock.jpg']}") no-repeat scroll left center;
+	background-size: cover;
+	background-position: center;
+	width: 420px;
+	height: 150px;
+	border: 3px solid #000;
+}
+
+.res{
+	margin-top:10px;
+}
+
+.res:after {
+	content: "";
+	background: #000;
+	height: 4px;
+	width: 60px;
+	display: block;
+}
+
+.text{
+	font-style: italic;
+	text-shadow: 2px 2px #F5F5DC;
+	color:#000;
+	font-weight:bold;
+	font-size:28px;
+	font-family:'arial';
+}
+
+.titulo {
+	text-align: center;
+	font-weight: bold;
+	font-size: 32px;
+	font-family: 'Arial';
+	font-style: italic;
+	color: #000;
+	text-shadow: 1px 1px #F0FFFF;
+}
+
+.pn .ui-widget-header {
+	height: 100px;
+	background: linear-gradient(to top left, #99ccff 0%, #003366 100%);
+	border: 3px solid #000;
+}
+
+.bordaMargem {
+	box-shadow: 2px 2px 2px 1px #000;
+}
+
+.pn .ui-panel-title {
+	font-size: 1em;
+	text-align: center;
+}
+
+.pn .ui-widget-header {
+	height: 20px;
+	text-align: center;
+}
+
+#barramenu {
+	display: block;
+	background-color: #F7F6F5;
+	position: absolute;
+	top: 110px;
+	width: 200px;
+	bottom: 0px;
+	left: 0px;
+	padding-top: 5px;
+	padding-left: 5px;
+}
+
+.bordaImagem {
+	border: 0;
+}
+
+.conteudo{
+	margin-left:225px;
+}
+
+

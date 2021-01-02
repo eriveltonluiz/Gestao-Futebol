@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<h:outputStylesheet name="estilo.css" library="css" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style>
+.ui-datagrid-data {
+	background: url("#{resource['img/fund.jpg']}") no-repeat scroll left;
+	margin-right: 77px;
+	border: 3px solid #000;
+}
+</style>
+</h:head>
+
+<h:body>
+	<ui:include src="/templates/menuPrincipal.xhtml" />
+	<h:form styleClass="conteudo" id="form">
+		<p:panel>
+			<f:facet name="header">
+				<center>
+					<h:outputText styleClass="title"
+						value="Copa Paredão da Bola Fut 6 de 2020" />
+					<br />
+				</center>
+			</f:facet>
+
+			<center class="cent">
+				<p:selectOneMenu converter="converterRodada"
+					value="#{resultadosBean.rodada}" id="comboRodadas">
+					<p:ajax process="@this" event="change" update="carForm"
+						listener="#{resultadosBean.carregarRodadas}" />
+					<f:selectItem itemLabel="[--Selecione rodada--]" itemValue=""
+						noSelectionOption="true" />
+					<f:selectItems value="#{resultadosBean.listRodadas}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Confrontos Mata-Mata"
+					action="resultadosMataMata?faces-redirect=true" process="@this"
+					styleClass="btnPrinc" style="margin-left:60px; padding-left: 0px 0px; border: 1px solid #fff;"/>
+			</center>
+		</p:panel>
+	</h:form>
+
+	<h:form styleClass="conteudo" id="carForm">
+		<p:fieldset style="margin-top: 15px" id="availableCarsField"
+			legend="#{resultadosBean.rodada.descricao}">
+			<center>
+				<h:outputText
+					style="font-weight:bold;font-style:italic; font-size:30px;margin-bottom:30px"
+					value="Confrontos Fase de Grupo Confirmados" />
+			</center>
+			<p:dataGrid id="gridCamp" var="conf"
+				emptyMessage="Sem confrontos confirmados"
+				style="background:url(../resources/img/fundoparedao.jpg) repeat scroll left"
+				value="#{resultadosBean.confrontos}" columns="1">
+				<center>
+					<p:panel class="pn" id="pnl">
+						<p:row>
+							<center id="res" class="res">
+								<h:graphicImage
+									style="margin-right:10px;width:50px;height:50px;box-shadow: 3px 3px 3px 1px #000"
+									value="#{conf.id.mandante.time.fotoIconBase64}" />
+								<h:outputText value="#{conf.id.mandante.time.nome}"
+									style="font-weight:bold;font-size:20px;font-style:italic;margin-right:15px" />
+								<h:outputText id="resUm" class="text"
+									value="#{conf.id.mandante.golsFeitos}" />
+
+								<h:outputLabel value=" X "
+									style="color:#000; font-weight:bold;margin-left:3px" />
+
+								<h:outputText id="resDois" class="text"
+									value="#{conf.id.visitante.golsFeitos}" />
+
+								<h:outputText value="#{conf.id.visitante.time.nome}"
+									style="font-weight:bold;font-size:20px;font-style:italic;margin-left:15px" />
+								<h:graphicImage
+									style="margin-left:15px;width:50px;height:50px;box-shadow: 3px 3px 3px 1px #000"
+									value="#{conf.id.visitante.time.fotoIconBase64}" />
+							</center>
+						</p:row>
+						<p:row>
+							<div style="text-align: center">
+
+								<h:outputText value="#{conf.horario}"
+									style="color:#363636;font-weight:bold; font-size:28px; font-family:arial">
+									<f:convertDateTime timeStyle="default" pattern="HH:mm"
+										timeZone="UTC-3" />
+								</h:outputText>
+
+							</div>
+						</p:row>
+						<p:commandLink action="#{resultadosBean.selecionarDados}"
+							process="@this" oncomplete="PF('dlgDadosConf').show()"
+							update="carForm:dialogDadosConf">
+							<p:graphicImage id="imginfo" library="img" name="infor.png"
+								width="35px" height="35px" styleClass="images">
+								<p:tooltip id="toolTipCanc" for="imginfo"
+									value="Informações da partida" position="top"
+									hideEffect="explode" />
+							</p:graphicImage>
+							<f:setPropertyActionListener value="#{conf}"
+								target="#{resultadosBean.confronto}" />
+						</p:commandLink>
+					</p:panel>
+				</center>
+			</p:dataGrid>
+			<h:panelGroup>
+				<center>
+					<p:commandButton styleClass="btns" value="Gerar relatório PDF"
+						process="@this" update="carForm:dialogResult"
+						oncomplete="PF('dlgRelatResult').show()" />
+				</center>
+			</h:panelGroup>
+		</p:fieldset>
+		<p:dialog widgetVar="dlgRelatResult" id="dialogResult" width="700px"
+			showEffect="explode" hideEffect="clip" height="700px"
+			resizable="false" modal="true">
+			<p:dataTable var="confr" value="#{resultadosBean.confrontos}"
+				id="tableCamp" style="text-align:center">
+				<p:column>
+					<h:outputText value="#{confr.horario}">
+						<f:convertDateTime pattern="HH:mm" timeZone="UTC-3"
+							timeStyle="default" />
+					</h:outputText>
+				</p:column>
+
+				<p:column>
+					<h:graphicImage style="width:30px;height:30px"
+						value="#{confr.id.mandante.time.fotoIconBase64}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{confr.id.mandante.time.nome}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{confr.id.mandante.golsFeitos}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="X" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{confr.id.visitante.golsFeitos}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{confr.id.visitante.time.nome}" />
+				</p:column>
+
+				<p:column>
+					<h:graphicImage style="width:30px;height:30px"
+						value="#{confr.id.visitante.time.fotoIconBase64}" />
+				</p:column>
+
+			</p:dataTable>
+
+			<h:panelGroup>
+				<center>
+					<h:commandButton value="Gerar relatório PDF">
+						<p:dataExporter type="pdf" target="tableCamp" fileName="relatorio" />
+					</h:commandButton>
+				</center>
+			</h:panelGroup>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgDadosConf" id="dialogDadosConf" width="700px"
+			showEffect="explode" hideEffect="clip" height="570px"
+			resizable="false" modal="true" header="Informações do confronto">
+
+			<p:panel
+				style="background:url(../resources/img/fund.jpg) repeat scroll left center;background-size:100%">
+				<p:panelGrid styleClass="pan">
+					<center style="font-weight: bold; color: white">
+						<h:graphicImage
+							style="margin-right:10px;width:80px;height:80px;box-shadow: 3px 3px 3px 1px #000"
+							value="#{resultadosBean.confronto.id.mandante.time.fotoIconBase64}" />
+						<h:outputText
+							value="#{resultadosBean.confronto.id.mandante.time.nome}"
+							style="font-size:20px;font-style:italic;box-shadow: 3px 3px 3px 1px #000" />
+
+						<h:outputLabel value=" X "
+							style="margin-left:3px;box-shadow: 3px 3px 3px 1px #000" />
+
+						<h:outputText
+							value="#{resultadosBean.confronto.id.visitante.time.nome}"
+							style="font-size:20px;font-style:italic;box-shadow: 3px 3px 3px 1px #000" />
+						<h:graphicImage
+							style="margin-left:15px;width:80px;height:80px;box-shadow: 3px 3px 3px 1px #000"
+							value="#{resultadosBean.confronto.id.visitante.time.fotoIconBase64}" />
+					</center>
+				</p:panelGrid>
+			</p:panel>
+			<br />
+			<p:panel
+				style="background:url(../resources/img/fundoparedao.jpg) repeat scroll left center;">
+				<p:panelGrid columns="2">
+					<f:facet name="header">
+						<h:outputText value="Autores dos gols" />
+						<br />
+						<h:graphicImage library="img" name="gols.png" width="68px"
+							height="68px" />
+					</f:facet>
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.golsMand}" emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.golsVisit}" emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>
+			</p:panel>
+
+			<br />
+			<p:panel
+				style="background:url(../resources/img/fundoparedao.jpg) repeat scroll left center;">
+				<p:panelGrid columns="2">
+					<f:facet name="header">
+						<h:outputText value="Cartão Amarelo" />
+						<br />
+						<h:graphicImage library="img" name="cartaoamarelo.png"
+							width="68px" height="68px" />
+					</f:facet>
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.amarelosMand}"
+						emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.amarelosVisit}"
+						emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>
+			</p:panel>
+
+			<br />
+			<p:panel
+				style="background:url(../resources/img/fundoparedao.jpg) repeat scroll left center;">
+				<p:panelGrid columns="2">
+					<f:facet name="header">
+						<h:outputText value="Cartão Vermelho" />
+						<br />
+						<h:graphicImage library="img" name="cartaovermelho.png"
+							width="68px" height="68px" />
+					</f:facet>
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.vermelhosMand}"
+						emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable style="text-align:center" var="jog"
+						value="#{resultadosBean.vermelhosVisit}"
+						emptyMessage="Sem registros">
+						<p:column>
+							<f:facet name="header">
+								<h:graphicImage style="box-shadow: 3px 3px 3px 1px #000"
+									library="img" name="jogador.png" width="25px" height="25px" />
+							</f:facet>
+							<h:outputText value="#{jog.jogador.nome}" />
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>

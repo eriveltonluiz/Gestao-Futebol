@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<h:outputStylesheet name="estilo.css" library="css" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style type="text/css">
+.ui-datagrid-data {
+	background: url("#{resource['img/fund.jpg']}") no-repeat scroll center;
+	background-size: 100%;
+	margin-right: 77px;
+	border: 3px solid #000;
+}
+
+.text{
+	font-weight:bold;
+	color:black;
+}
+</style>
+</h:head>
+
+<h:body>
+<ui:include src="/templates/barraProgresso.xhtml" />
+	<h:form id="form">
+		<p:growl showDetail="true" id="msg" />
+		<p:panel>
+			<f:facet name="header" class="as">
+				<center>
+					<h1>Copa Paredão da Bola Fut 6 de 2020</h1>
+					<br />
+					<p:commandButton action="confrontosMataMata?faces-redirect=true" value="Confrontos" styleClass="btnPrinc"/>
+				</center>
+			</f:facet>
+		</p:panel>
+		
+		<p:dataGrid id="gridCampFinal" var="conf" 
+			emptyMessage="Sem confrontos confirmados"
+			style="background:url(../resources/img/fund.jpg) repeat scroll left"
+			value="#{faseFinalBean.finais}" columns="4">
+			<f:facet name="header"><h:outputText style="font-size:22px" value="Finais" />
+						<br /></f:facet>
+			<center>
+				<p:panel style="width:350px;background:url(../resources/img/tock.jpg) repeat scroll left center; background-size:100%">
+					<f:facet name="header"><h:outputText style="margin-left:12px" value="#{conf.identificador}ºLugar"/></f:facet>
+					<p:row>
+						<center>
+							<h:graphicImage
+								style="margin-right:10px;width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.mandante.time.fotoIconBase64}" />
+							<h:outputText value="#{conf.mandante.time.nome}" styleClass="text"
+								style="font-weight:bold;font-size:15px;font-style:italic;margin-right:15px" />
+							<br />
+							<p:row>
+								<div style="margin-bottom: 6px; margin-top: 6px">
+									<h:outputText styleClass="text"
+										value="#{conf.mandante.golsFeitos}" />
+
+									<h:outputLabel value=" X "
+										style="color:#000; font-weight:bold;margin-left:3px" />
+
+									<h:outputText id="resDoisF" class="text"
+										value="#{conf.visitante.golsFeitos}" />
+								</div>
+							</p:row>
+
+							<h:outputText value="#{conf.visitante.time.nome}" styleClass="text"
+								style="margin-right:10px;font-weight:bold;font-size:15px;font-style:italic" />
+							<h:graphicImage
+								style="width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.visitante.time.fotoIconBase64}" />
+						</center>
+					</p:row>
+					<p:row>
+						<div style="text-align: center">
+							<h:outputText value="#{conf.horario}"
+								style="color:black;font-weight:bold; font-size:28px; font-family:arial">
+								<f:convertDateTime timeStyle="default" pattern="HH:mm"
+									timeZone="UTC-3" />
+							</h:outputText>
+						</div>
+					</p:row>
+				</p:panel>
+			</center>
+		</p:dataGrid>
+<br />
+		
+		<p:dataGrid id="gridCampSemi" var="conf" 
+			emptyMessage="Sem confrontos confirmados"
+			style="background:url(../resources/img/fund.jpg) repeat scroll left"
+			value="#{faseFinalBean.semifinais}" columns="4">
+			<f:facet name="header"><h:outputText style="font-size:22px" value="Semifinal" />
+						<br /></f:facet>
+			<center>
+				<p:panel style="width:350px; background:url(../resources/img/tock.jpg) repeat scroll left center; background-size:100%">
+					<p:row>
+						<center>
+							<h:graphicImage
+								style="margin-right:10px;width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.mandante.time.fotoIconBase64}" />
+							<h:outputText value="#{conf.mandante.time.nome}" styleClass="text"
+								style="font-weight:bold;font-size:15px;font-style:italic;margin-right:15px" />
+							<br />
+							<p:row>
+								<div style="margin-bottom: 6px; margin-top: 6px">
+									<h:outputText id="resUmF" class="text"
+										value="#{conf.mandante.golsFeitos}" />
+
+									<h:outputLabel value=" X "
+										style="color:#000; font-weight:bold;margin-left:3px" />
+
+									<h:outputText id="resDoisF" class="text"
+										value="#{conf.visitante.golsFeitos}" />
+								</div>
+							</p:row>
+
+							<h:outputText value="#{conf.visitante.time.nome}" styleClass="text"
+								style="margin-right:10px;font-weight:bold;font-size:15px;font-style:italic" />
+							<h:graphicImage
+								style="width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.visitante.time.fotoIconBase64}" />
+						</center>
+					</p:row>
+					<p:row>
+						<div style="text-align: center">
+							<h:outputText value="#{conf.horario}"
+								style="color:black;font-weight:bold; font-size:28px; font-family:arial">
+								<f:convertDateTime timeStyle="default" pattern="HH:mm"
+									timeZone="UTC-3" />
+							</h:outputText>
+						</div>
+					</p:row>
+				</p:panel>
+			</center>
+		</p:dataGrid>
+<br />
+		
+		<p:dataGrid id="gridCampQuartas" var="conf" 
+			emptyMessage="Sem confrontos confirmados"
+			style="background:url(../resources/img/fund.jpg) repeat scroll left"
+			value="#{faseFinalBean.quartas}" columns="4">
+			<f:facet name="header"><h:outputText style="font-size:22px" value="Quartas de final" />
+						<br /></f:facet>
+			<center>
+				<p:panel style="width:200px; background:url(../resources/img/tock.jpg) repeat scroll left center;">
+					<p:row>
+						<center>
+							<h:graphicImage
+								style="margin-right:10px;width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.mandante.time.fotoIconBase64}" />
+							<h:outputText value="#{conf.mandante.time.nome}" styleClass="text"
+								style="font-weight:bold;font-size:15px;font-style:italic;margin-right:15px" />
+							<br />
+							<p:row>
+								<div style="margin-bottom: 6px; margin-top: 6px">
+									<h:outputText id="resUmQ" class="text"
+										value="#{conf.mandante.golsFeitos}" />
+
+									<h:outputLabel value=" X "
+										style="color:#000; font-weight:bold;margin-left:3px" />
+
+									<h:outputText id="resDoisQ" class="text"
+										value="#{conf.visitante.golsFeitos}" />
+								</div>
+							</p:row>
+
+							<h:outputText value="#{conf.visitante.time.nome}" styleClass="text"
+								style="margin-right:10px;font-weight:bold;font-size:15px;font-style:italic" />
+							<h:graphicImage
+								style="width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.visitante.time.fotoIconBase64}" />
+						</center>
+					</p:row>
+					<p:row>
+						<div style="text-align: center">
+							<h:outputText value="#{conf.horario}"
+								style="color:black;font-weight:bold; font-size:28px; font-family:arial">
+								<f:convertDateTime timeStyle="default" pattern="HH:mm"
+									timeZone="UTC-3" />
+							</h:outputText>
+						</div>
+					</p:row>
+				</p:panel>
+			</center>
+		</p:dataGrid>
+<br />
+		<p:dataGrid id="gridCamp" var="conf"
+			emptyMessage="Sem confrontos confirmados"
+			style="background:url(../resources/img/fund.jpg) repeat scroll left"
+			value="#{faseFinalBean.oitavas}" columns="8">
+			<center>
+			<f:facet name="header"><h:outputText style="font-size:22px" value="Oitavas de final" />
+						<br /></f:facet>
+				<p:panel style="background:url(../resources/img/tock.jpg) repeat scroll left center; ">
+					<p:row>
+						<center id="res">
+							<h:graphicImage
+								style="margin-right:10px;width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.mandante.time.fotoIconBase64}" />
+							<h:outputText value="#{conf.mandante.time.nome}" styleClass="text"
+								style="font-weight:bold;font-size:15px;font-style:italic;margin-right:15px" />
+							<br />
+							<p:row>
+								<div style="margin-bottom: 6px; margin-top: 6px">
+									<h:outputText id="resUm" class="text"
+										value="#{conf.mandante.golsFeitos}" />
+
+									<h:outputLabel value=" X "
+										style="color:#000; font-weight:bold;margin-left:3px" />
+
+									<h:outputText id="resDois" class="text"
+										value="#{conf.visitante.golsFeitos}" />
+								</div>
+							</p:row>
+
+							<h:outputText value="#{conf.visitante.time.nome}" styleClass="text"
+								style="margin-right:10px;font-weight:bold;font-size:15px;font-style:italic" />
+							<h:graphicImage
+								style="width:25px;height:25px;box-shadow: 3px 3px 3px 1px #000"
+								value="#{conf.visitante.time.fotoIconBase64}" />
+						</center>
+					</p:row>
+					<p:row>
+						<div style="text-align: center; margin-top:6px">
+							<h:outputText value="#{conf.horario}"
+								style="color:black;font-weight:bold; font-size:28px; font-family:arial">
+								<f:convertDateTime timeStyle="default" pattern="HH:mm"
+									timeZone="UTC-3" />
+							</h:outputText>
+						</div>
+					</p:row>
+				</p:panel>
+			</center>
+		</p:dataGrid>
+	</h:form>
+</h:body>
+</html>

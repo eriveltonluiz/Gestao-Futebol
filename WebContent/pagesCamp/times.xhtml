@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<h:head>
+	<h:outputStylesheet library="javascript" name="scripts.js" />
+	<h:outputStylesheet library="css" name="estilo.css" id="cssSistema" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style type="text/css">
+.ui-dataview-list .ui-dataview-row {
+	border-bottom: 1px solid #A8A8A8;
+	padding: 25px 10px;
+	/* with the exported variables from Nova and Luna Themes*/
+	border-bottom-color: var(- -input-border-color, #A8A8A8);
+}
+
+.logo {
+	width: 5%;
+}
+
+.detail {
+	width: 85%;
+	padding-left: 25px;
+}
+
+.ui-panel-title {
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	font-family: 'Arial';
+	font-style: italic;
+	color: #000;
+	text-shadow: 1px 1px #F0FFFF;
+}
+</style>
+</h:head>
+
+<h:body>
+	<ui:include src="/templates/menuPrincipal.xhtml" />
+	<h:form id="form" styleClass="conteudo">
+		<p:dataGrid var="time" value="#{infoBean.times}" columns="3"
+			layout="grid" rows="12" paginator="true" id="times"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+			<f:facet name="header">
+            Times campeonato
+        </f:facet>
+
+			<p:panel header="#{time.nome}"
+				style="text-align:center;font-size:12px">
+				<p:panelGrid columns="1" style="width:100%">
+					<h:graphicImage width="50px" height="40px"
+						value="#{time.fotoIconBase64}" />
+
+					<p:commandLink oncomplete="PF('dlgTime').show()" title="Detalhes"
+						process="@this" update="form:dialogTime"
+						action="#{infoBean.jogadoresTime}">
+						<h:outputText styleClass="pi pi-search" style="margin:0 auto;" />
+						<f:setPropertyActionListener value="#{time}"
+							target="#{infoBean.time}" />
+					</p:commandLink>
+				</p:panelGrid>
+			</p:panel>
+
+		</p:dataGrid>
+
+		<p:dialog header="Informação Time" modal="true" widgetVar="dlgTime"
+			width="600px" height="600px" id="dialogTime" showEffect="explode"
+			hideEffect="clip" resizable="true">
+			<center>
+				<h2>
+					<h:outputText value="#{infoBean.time.nome}" />
+				</h2>
+				<p:panelGrid columns="1" columnClasses="label,value">
+					<p:panel>
+						<f:facet name="header">
+							Jogador em destaque
+						</f:facet>
+
+						<h:graphicImage library="img" name="jogador.png" width="25px"
+							height="25px" />
+						<h:outputText value="#{infoBean.jogadorMaisGols.nome}" />
+						<h:graphicImage style="margin-left:40px" library="img"
+							name="gols.png" width="25px" height="25px" />
+						<h:outputText value="#{infoBean.jogadorMaisGols.gols}" />
+					</p:panel>
+					<p:panel>
+						<f:facet name="header">
+						Jogador mais amarelado
+					</f:facet>
+
+						<h:graphicImage library="img" name="jogador.png" width="25px"
+							height="25px" />
+						<h:outputText value="#{infoBean.jogadorMaisAmarelos.nome}" />
+						<h:graphicImage style="margin-left:40px" library="img"
+							name="cartaoamarelo.png" width="25px" height="25px" />
+						<h:outputText
+							value="#{infoBean.jogadorMaisAmarelos.qtdCartoesAmarelos}" />
+					</p:panel>
+
+					<p:panel>
+						<f:facet name="header">
+					Jogador com mais cartões vermelhos
+				</f:facet>
+						<h:graphicImage library="img" name="jogador.png" width="25px"
+							height="25px" />
+						<h:outputText value="#{infoBean.jogadorMaisVermelhos.nome}" />
+						<h:graphicImage style="margin-left:40px" library="img"
+							name="cartaovermelho.png" width="25px" height="25px" />
+						<h:outputText
+							value="#{infoBean.jogadorMaisVermelhos.qtdCartoesVermelhos}" />
+					</p:panel>
+				</p:panelGrid>
+			</center>
+			<br />
+			<p:panel>
+				<p:dataTable var="time" value="#{infoBean.listJogadores}"
+					style="text-align:center">
+
+					<f:facet name="header">
+							Lista de Jogadores
+						</f:facet>
+					<p:column headerText="Nome" width="120px">
+						<h:outputText value="#{time.nome}" />
+					</p:column>
+
+					<p:column headerText="Camisa" style="width:55px;">
+						<h:outputText value="#{time.numCamisa}" />
+					</p:column>
+
+					<p:column style="width:40px;">
+						<f:facet name="header">
+							<h:graphicImage library="img" name="cartaoamarelo.png"
+								width="25px" height="25px" />
+						</f:facet>
+						<h:outputText value="#{time.qtdCartoesAmarelos}" />
+					</p:column>
+
+					<p:column style="width:40px;">
+						<f:facet name="header">
+							<h:graphicImage library="img" name="cartaovermelho.png"
+								width="25px" height="25px" />
+						</f:facet>
+						<h:outputText value="#{time.qtdCartoesVermelhos}" />
+					</p:column>
+
+					<p:column style="width:40px;">
+						<f:facet name="header">
+							<h:graphicImage library="img" name="gols.png" width="25px"
+								height="25px" />
+						</f:facet>
+						<h:outputText value="#{time.gols}" />
+					</p:column>
+
+					<p:column headerText="RG">
+						<h:outputText value="#{time.rg}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui = "http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<h:outputStylesheet library="css" name="estilo.css" id="cssSistema" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<h:outputStylesheet library="javascript" name="scripts.js" />
+</h:head>
+
+<h:body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.top').click(function() {
+				$('html,body').animate({
+					scrollTop : 0
+				}, 'slow');
+			});
+		});
+	</script>
+	
+	<ui:include src="/templates/menuPrincipal.xhtml" />
+	<h:form id="formCad" styleClass="back conteudo" enctype="multipart/form-data">
+		<p:growl id="msg" showDetail="true"
+			life="6500">
+			<p:autoUpdate />
+		</p:growl>
+		<p:fieldset legend="Cadastro de times"
+			style="text-align: left; border:1px solid #000">
+
+			<f:facet name="header">
+				<h1>Relatório de campeonato</h1>
+			</f:facet>
+
+			<p:panel class="back">
+				<h:panelGrid columns="4" id="cadTimes">
+
+					<h:outputText value="ID:" style="margin-left: 100px" />
+					<p:inputText value="#{timesCampBean.time.id}" readonly="true"
+						disabled="true" />
+
+					<h:outputText value="Time:" style="margin-left: 55px" />
+					<p:inputText value="#{timesCampBean.time.nome}" required="true" requiredMessage="Necessário inserir o time"/>
+
+					<h:outputText value="Técnico:" style="margin-left: 100px" />
+					<p:inputText value="#{timesCampBean.time.tecnico}" />
+
+					<h:outputText value="Auxiliar técnico:" style="margin-left: 75px" />
+					<p:inputText value="#{timesCampBean.time.auxTecnico}" />
+
+				</h:panelGrid>
+				<h:panelGrid>
+				<p:column>
+						<p:fileUpload listener="#{timesCampBean.handleFileUpload}"
+							mode="advanced" dragDropSupport="false" auto="true" 
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/" style="margin-left: 50px"
+							invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)" />
+					</p:column>
+				</h:panelGrid>
+			</p:panel>
+
+			<br />
+
+			<h:panelGroup>
+				<center>
+					<p:commandButton value="Cadastrar" class="btns" process="@this" update="formCad formTable"
+						style="margin-right: 15px" action="#{timesCampBean.inserirTime}"/>
+
+					<p:commandButton class="btns" id="btnLimpar" value="limpar" process="@this"
+						actionListener="#{timesCampBean.limparCamposTime}"
+						immediate="true" update="formCad">
+						<p:resetInput target="formCad" />
+					</p:commandButton>
+				</center>
+			</h:panelGroup>
+		</p:fieldset>
+		<br />
+	</h:form>
+
+	<h:form id="formTable" styleClass="conteudo">
+		<p:dataTable value="#{timesCampBean.times}" var="team"
+			style="box-shadow: 3px 3px 3px #000; background: none"
+			paginator="true" rowHover="true" rows="8" id="tableTime"
+			class="datTable">
+			<f:facet name="header">
+				<p:outputLabel value="TIMES CAMPEONATO"
+					style="font-size:35px; font-style: italic; font-style: cambria; text-shadow: 2px 2px gold" />
+			</f:facet>
+
+			<f:facet name="footer">
+				<br />
+				<p:commandButton value="Solicitar relatório" class=" btnPrinc"
+					action="#{timesCampBean.solicitarRelatorio}">
+					<f:ajax execute="@this" render="formCad :msg" />
+				</p:commandButton>
+			</f:facet>
+
+			<p:column headerText="ID" width="20">
+				<h:outputText value="#{team.id}" />
+			</p:column>
+
+			<p:column headerText="Time">
+				<h:outputText value="#{team.nome}" />
+			</p:column>
+
+			<p:column headerText="Foto time">
+				<center>
+					<h:graphicImage width="50px" height="40px"
+						value="#{team.fotoIconBase64}" />
+				</center>
+			</p:column>
+
+			<p:column headerText="Técnico">
+				<h:outputText value="#{team.tecnico}" />
+			</p:column>
+
+			<p:column headerText="Auxiliar Técnico">
+				<h:outputText value="#{team.auxTecnico}" />
+			</p:column>
+
+			<p:column headerText="Alterar" style="width:65px">
+				<h:commandLink id="btnEdit" class="top"
+					actionListener="#{timesCampBean.editar}">
+					<center>
+						<h:graphicImage url="resources/img/icon-editar.png" width="40px"
+							height="40px" styleClass="images img-animated" />
+					</center>
+					<f:setPropertyActionListener value="#{team}"
+						target="#{timesCampBean.time}" />
+					<f:ajax execute="btnEdit" render="formCad" />
+				</h:commandLink>
+			</p:column>
+
+			<p:column headerText="Excluir" style="width:65px">
+				<p:commandLink action="#{timesCampBean.removerTime}"
+					update="tableTime">
+					<center>
+						<h:graphicImage url="resources/img/iconexcluir.png" width="35px"
+							height="35px" class="images" />
+					</center>
+					<f:setPropertyActionListener value="#{team}"
+						target="#{timesCampBean.time}" />
+				</p:commandLink>
+			</p:column>
+
+			<p:column headerText="Jogadores" style="width:73px">
+				<p:commandLink oncomplete="PF('dlgJogador').show()"
+					update="formTable:jogador" action="#{timesCampBean.listaJogadores}">
+					<center>
+						<h:graphicImage library="img" name="jogador.png" width="35px"
+							height="35px" class="images" />
+					</center>
+					<f:setPropertyActionListener value="#{team}"
+						target="#{timesCampBean.time}" />
+				</p:commandLink>
+			</p:column>
+
+			<p:column headerText="Inserir por arquivo" style="width:85px">
+				<p:commandLink oncomplete="PF('dlgJogadorAll').show()"
+					update="formTable:todo">
+					<center>
+						<h:graphicImage library="img" name="jogTodo.png" width="35px"
+							height="35px" class="images" />
+					</center>
+					<f:setPropertyActionListener value="#{team}"
+						target="#{timesCampBean.time}" />
+				</p:commandLink>
+			</p:column>
+
+		</p:dataTable>
+
+		<p:dialog widgetVar="dlgJogador" id="jogador" modal="true"
+			draggable="false" resizable="false" width="700px" height="500px"
+			showEffect="explode" header="Formulário jogador." hideEffect="clip">
+
+			<f:ajax event="close" listener="#{timesCampBean.novo}"
+				immediate="true" />
+			<center>
+				<p:panel class="back">
+					<f:facet name="header">
+						<h:outputText style="margin-top: 10px"
+							value="Elenco: #{timesCampBean.time.nome}" />
+					</f:facet>
+					<p:panelGrid columns="2" id="cadJogador" style="text-align:center">
+
+						<h:outputText value="ID:" />
+						<p:inputText value="#{timesCampBean.jogador.id}" id="id"
+							disabled="true" readonly="true" />
+
+						<h:outputText value="Jogador" />
+						<p:inputText value="#{timesCampBean.jogador.nome}" id="nome" />
+
+						<h:outputText value="RG:" />
+						<p:inputText value="#{timesCampBean.jogador.rg}" maxlength="9" id="rg" />
+
+						<h:outputText value="Número:" />
+						<p:inputText value="#{timesCampBean.jogador.numCamisa}" id="num" />
+
+						<h:outputText value="Nascimento:" />
+						<p:inputMask mask="99/99/9999"
+							value="#{timesCampBean.jogador.dataNascimento}" id="dataNasc">
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy"
+								timeZone="UTC(GMT-0)" />
+						</p:inputMask>
+
+						<p:commandButton value="cadastrar"
+							action="#{timesCampBean.inserirJogadores}"
+							update="cadJogador tableJogadores" style="margin-right: 15px"
+							styleClass="btns"/>
+
+						<p:commandButton id="btnlimparjog" value="limpar" process="@this"
+							action="#{timesCampBean.limparCamposJogador}" immediate="true"
+							update="cadJogador" class="btns">
+							<p:resetInput target="cadJogador" />
+						</p:commandButton>
+
+					</p:panelGrid>
+				</p:panel>
+			</center>
+			<br />
+
+			<p:dataTable var="jogador" value="#{timesCampBean.time.jogadores}"
+				id="tableJogadores" rowHover="true">
+				<p:column headerText="Nome">
+					<h:outputText value="#{jogador.nome}" />
+				</p:column>
+
+				<p:column headerText="RG">
+					<h:outputText value="#{jogador.rg}" />
+				</p:column>
+
+				<p:column headerText="Número">
+					<h:outputText value="#{jogador.numCamisa}" />
+				</p:column>
+
+				<p:column headerText="Nascimento">
+					<h:outputText value="#{jogador.dataNascimento}">
+						<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy"
+							timeZone="UTC(GMT-0)" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Time">
+					<h:outputText value="#{timesCampBean.time.nome}" />
+				</p:column>
+
+				<p:column headerText="Alterar">
+					<h:commandLink action="#{timesCampBean.editar}">
+						<center>
+							<h:graphicImage url="resources/img/editar.jpg" width="35px"
+								height="35px" class="images" />
+						</center>
+						<f:setPropertyActionListener value="#{jogador}"
+							target="#{timesCampBean.jogador}" />
+						<f:ajax execute="@this" render="formTable:cadJogador" />
+					</h:commandLink>
+
+				</p:column>
+
+				<p:column headerText="Excluir">
+					<p:commandLink actionListener="#{timesCampBean.removerJogadores}"
+						id="btnRemoveJog" update="tableJogadores">
+						<center>
+							<h:graphicImage url="resources/img/removejog.png" width="35px"
+								height="35px" class="images" />
+						</center>
+						<f:param name="codigojogador" value="#{jogador.id}" />
+						<f:ajax execute="btnRemoveJog" render="formTable:tableJogadores" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgJogadorAll" width="300px" height="200px"
+			showEffect="explode" modal="false" resizable="false"
+			draggable="false" id="todo" hideEffect="clip"
+			header="Cadastro de jogadores por arquivo."
+			footer="Arquivos víaveis: docx, pdf, xlsx.">
+
+			<f:ajax event="close"
+				execute="formTable:btnlimparjog formCad:btnLimpar" />
+			<p:panelGrid columns="1">
+				<p:fileUpload listener="#{timesCampBean.inserirAoTodo}"
+					mode="advanced" label="Carregar" />
+					
+				<f:facet name="footer">
+					<h:outputText style="margin-top: 10px"
+						value="Time: #{timesCampBean.time.nome}" />
+				</f:facet>
+			</p:panelGrid>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgConfirm" width="500px" height="200px"
+			showEffect="explode" modal="false" resizable="false"
+			draggable="false" id="confirm">
+
+			<p:panel>
+				<p:panelGrid>
+					<h:outputText
+						value="Escolha a quantidade de grupos para o campeonato" />
+					<p:inputText id="qtdGrupos" value="#{timesCampBean.qtd}" />
+					
+					<center>
+						<p:commandButton value="Confirmar" action="#{timesCampBean.inserirGrupos}" />
+					</center>
+				</p:panelGrid>
+			</p:panel>
+		</p:dialog>
+
+	</h:form>
+</h:body>
+
+</html>

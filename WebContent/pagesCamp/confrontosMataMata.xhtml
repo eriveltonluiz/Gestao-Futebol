@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<h:outputStylesheet name="estilo.css" library="css" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style type="text/css">
+.ui-datagrid-data {
+	background: url("#{resource['img/fund.jpg']}") no-repeat scroll center;
+	background-size: 100%;
+	margin-right: 77px;
+	border: 3px solid #000;
+}
+
+.realinhar {
+	margin-left: 0px
+}
+</style>
+</h:head>
+
+<h:body>
+	<ui:include src="/templates/barraProgresso.xhtml" />
+	<h:form id="form">
+		<p:growl life="5500" id="msg" />
+		<p:panel>
+			<f:facet name="header" class="as">
+				<center>
+					<h:outputText class="title"
+						value="Copa Paredão da Bola Fut 6 de 2020" />
+					<br />
+				</center>
+			</f:facet>
+
+			<center class="cent">
+				<p:selectOneMenu value="#{confrontosBean.etapa}"
+					style="margin-left: 20px" converter="converterEtapa">
+					<p:ajax update="carForm" event="change" process="@this"
+						listener="#{confrontosBean.carregarEtapas}" />
+					<f:selectItem itemLabel="[--Selecione a fase--]"
+						noSelectionOption="true" />
+					<f:selectItems value="#{confrontosBean.listEtapas}" />
+				</p:selectOneMenu>
+
+
+			</center>
+		</p:panel>
+	</h:form>
+
+	<h:form id="carForm"
+		style="background:url(../resources/img/fundo-grama.jpg) repeat scroll left center;">
+		<p:fieldset
+			style="margin-top: 15px;background:url(resources/img/fundo-grama.jpg) repeat scroll left;border: 3px solid #000"
+			id="availableCarsField" legend="#{confrontosBean.etapa.descricao}">
+
+			<p:dataGrid id="gridCamp" var="conf"
+				emptyMessage="Sem confrontoss para essa etapa"
+				value="#{confrontosBean.confrontosMata}" columns="2">
+
+				<p:panel class="pn" id="pnl" style="height: 190px">
+					<f:facet name="header" id="header">
+						<h:outputText value="#{conf.mandante.time.nome}" />
+						<h:outputLabel value=" X " />
+						<h:outputText value="#{conf.visitante.time.nome}" />
+						<br />
+					</f:facet>
+
+					<h:panelGrid columns="1" id="pnlEscopo"
+						style="width:100%;padding: 5px 0; display: inline-block; margin-left:15px;">
+
+						<f:facet name="footer" id="footer">
+							<center>
+								<p:commandButton value="Confirmar placar" styleClass="btns"
+									oncomplete="PF('cd').show()" update="formCd:cdConf">
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandButton>
+							</center>
+						</f:facet>
+
+						<p:row>
+							<div style="text-align: center">
+								<p:commandLink oncomplete="PF('dlgVermelho').show()"
+									action="#{confrontosBean.listarVermelhos}"
+									update="carForm:dialogVerm">
+									<p:graphicImage id="imgverm" library="img"
+										name="cartaovermelho.png" class="tamImg images">
+										<p:tooltip id="toolTipVerm" for="imgverm"
+											value="Expulsar jogadores" position="top"
+											hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf.mandante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+
+								<p:commandLink oncomplete="PF('dlgAmarelados').show()"
+									action="#{confrontosBean.listarAmarelados}"
+									update="carForm:dialogAmar">
+									<p:graphicImage id="imgamar" library="img"
+										style="margin-left:5px;" name="cartaoamarelo.png"
+										class="tamImg images">
+										<p:tooltip id="toolTipAmar" for="imgamar"
+											value="Advertir jogadores com amarelo" position="top"
+											hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf.mandante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+
+								<p:commandLink id="linkgolsmand"
+									action="#{confrontosBean.listarJogadores}"
+									oncomplete="PF('dlgGols').show()" update="carForm:dialogGols">
+									<p:graphicImage id="imggols" library="img" name="gols.png"
+										class="tamImg images" style="margin-left:5px;">
+										<p:tooltip id="toolTipGols" for="imggols" value="Marcar gols"
+											position="top" hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf.mandante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+
+								<p:commandLink id="linkcanc" oncomplete="PF('dlgGols').show()"
+									update="carForm:dialogGols"
+									action="#{confrontosBean.listarjogadGols}">
+									<p:graphicImage id="imgcanc" library="img" name="canc.png"
+										style="margin-right:20px;margin-left:5px;"
+										class="tamImg images">
+										<p:tooltip id="toolTipCanc" for="imgcanc"
+											value="Anular um gol" position="top" hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+									<f:setPropertyActionListener value="#{conf.mandante.time}"
+										target="#{confrontosBean.timeCamp}" />
+								</p:commandLink>
+
+								<h:outputText value="#{conf.horario}"
+									style="color:#363636;font-weight:bold; font-size:28px; font-family:'arial'">
+									<f:convertDateTime timeStyle="default" pattern="HH:mm"
+										timeZone="GMT-3" />
+								</h:outputText>
+
+								<p:commandLink id="linkcanc2"
+									action="#{confrontosBean.listarjogadGols}"
+									oncomplete="PF('dlgGols').show()" update="carForm:dialogGols">
+									<p:graphicImage id="imgcanc2" library="img" name="canc.png"
+										class="tamImg images" style="margin-left:20px;">
+										<p:tooltip id="toolTipCanc2" for="imgcanc2"
+											value="Anular um gol" position="top" hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+									<f:setPropertyActionListener value="#{conf.visitante.time}"
+										target="#{confrontosBean.timeCamp}" />
+								</p:commandLink>
+
+								<p:commandLink oncomplete="PF('dlgGols').show()"
+									action="#{confrontosBean.listarJogadores}"
+									update="carForm:dialogGols">
+
+									<p:graphicImage id="imggols2" library="img" name="gols.png"
+										class="tamImg images" style="margin-left:5px;">
+										<p:tooltip id="toolTipGols2" for="imggols2"
+											value="Marcar gols" position="top" hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf.visitante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+
+								<p:commandLink oncomplete="PF('dlgAmarelados').show()"
+									action="#{confrontosBean.listarAmarelados}"
+									update="carForm:dialogAmar">
+									<p:graphicImage id="imgamar2" library="img"
+										style="margin-left:5px;" name="cartaoamarelo.png"
+										class="tamImg images">
+										<p:tooltip id="toolTipAmar2" for="imgamar2"
+											value="Advertir jogadores com amarelo" position="top"
+											hideEffect="explode" />
+									</p:graphicImage>
+									<f:setPropertyActionListener value="#{conf.visitante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+
+								<p:commandLink oncomplete="PF('dlgVermelho').show()"
+									action="#{confrontosBean.listarVermelhos}"
+									update="carForm:dialogVerm">
+									<p:graphicImage id="imgverm2" library="img"
+										style="margin-left:3px;" name="cartaovermelho.png"
+										class="tamImg images">
+										<p:tooltip id="toolTipVerm2" for="imgverm2"
+											value="Expulsar jogadores" position="top"
+											hideEffect="explode" />
+									</p:graphicImage>
+
+									<f:setPropertyActionListener value="#{conf.visitante.time}"
+										target="#{confrontosBean.timeCamp}" />
+									<f:setPropertyActionListener value="#{conf}"
+										target="#{confrontosBean.confronto}" />
+								</p:commandLink>
+							</div>
+						</p:row>
+						<p:row>
+							<center id="res" class="res">
+								<h:graphicImage style="margin-right:10px;width:30px;height:30px"
+									value="#{conf.mandante.time.fotoIconBase64}" />
+
+								<h:outputText id="resUm" class="text"
+									value="#{conf.mandante.golsFeitos}" style="" />
+
+								<h:outputLabel value=" X "
+									style="color:#000; font-weight:bold;margin-left:3px" />
+
+								<h:outputText id="resDois" class="text"
+									value="#{conf.visitante.golsFeitos}" />
+								<h:graphicImage style="margin-left:15px;width:30px;height:30px"
+									value="#{conf.visitante.time.fotoIconBase64}" />
+							</center>
+						</p:row>
+
+					</h:panelGrid>
+
+				</p:panel>
+
+			</p:dataGrid>
+		</p:fieldset>
+
+		<p:dialog modal="true" draggable="false" resizable="false"
+			showEffect="explode" id="dialogGols" width="500px" height="400px"
+			widgetVar="dlgGols" hideEffect="clip">
+			<p:ajax event="close" listener="#{confrontosBean.novo}" />
+			<p:pickList var="jog" value="#{confrontosBean.jogadores}"
+				effect="bounce" showCheckbox="true" converter="converterPickList"
+				itemValue="#{jog}" itemLabel="#{jog.nome}" responsive="true"
+				style="width:400px; height:100px" id="pick">
+				<f:facet name="sourceCaption">Jogadores</f:facet>
+				<f:facet name="targetCaption">Atores dos gols</f:facet>
+
+				<p:column>
+					<h:outputText value="#{jog.nome}" />
+				</p:column>
+
+				<p:ajax event="transfer" listener="#{confrontosBean.adicionarJog}" />
+
+			</p:pickList>
+			<p:commandButton value="Submeter" styleClass="btns"
+				actionListener="#{confrontosBean.manipularResultados}"
+				action="#{confrontosBean.novo}" update="carForm dialogGols form:msg" />
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgAmarelados" id="dialogAmar" modal="true"
+			draggable="false" resizable="false" showEffect="explode"
+			width="500px" height="400px" hideEffect="clip">
+			<p:ajax event="close" listener="#{confrontosBean.novo}" />
+			<p:pickList var="jog" value="#{confrontosBean.jogadores}"
+				showCheckbox="true" converter="converterPickList" itemValue="#{jog}"
+				itemLabel="#{jog.nome}">
+
+				<f:facet name="sourceCaption">Jogadores</f:facet>
+				<f:facet name="targetCaption">Amarelados</f:facet>
+
+				<p:column>
+					<h:outputText value="#{jog.nome}" />
+				</p:column>
+
+				<p:ajax event="transfer" listener="#{confrontosBean.adicionarJog}" />
+
+			</p:pickList>
+			<p:commandButton value="Submeter" styleClass="btns"
+				action="#{confrontosBean.novo}"
+				actionListener="#{confrontosBean.incluirCartoesAmarelos}"
+				update="carForm dialogAmar form:msg" />
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgVermelho" id="dialogVerm" modal="true"
+			draggable="false" resizable="false" showEffect="explode"
+			width="500px" height="400px" hideEffect="clip">
+			<p:ajax event="close" listener="#{confrontosBean.novo}" />
+			<p:pickList var="jog" value="#{confrontosBean.jogadores}"
+				showCheckbox="true" converter="converterPickList" itemValue="#{jog}"
+				itemLabel="#{jog.nome}">
+
+				<f:facet name="sourceCaption">Jogadores</f:facet>
+				<f:facet name="targetCaption">Expulsos</f:facet>
+
+				<p:column>
+					<h:outputText value="#{jog.nome}" />
+				</p:column>
+
+				<p:ajax event="transfer" listener="#{confrontosBean.adicionarJog}" />
+
+			</p:pickList>
+			<p:commandButton value="Submeter" styleClass="btns"
+				action="#{confrontosBean.novo}"
+				actionListener="#{confrontosBean.incluirCartoesVermelhos}"
+				update="carForm dialogVerm form:msg" />
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgEscVencedor" id="dialogVencedor" modal="true"
+			draggable="false" resizable="false" showEffect="explode"
+			width="400px" height="200px" hideEffect="clip">
+			<center>
+				<h2>Time vencedor do confronto</h2>
+			</center>
+			<p:panelGrid>
+				<p:selectOneMenu value="#{confrontosBean.timeVencedor}" appendTo="@(body)">
+					<f:selectItem itemValue="[--Selecione--]" noSelectionOption="true" />
+					<f:selectItem
+						itemValue="#{confrontosBean.confronto.mandante.time.nome}"
+						itemLabel="#{confrontosBean.confronto.mandante.time.nome}" />
+					<f:selectItem
+						itemValue="#{confrontosBean.confronto.visitante.time.nome}"
+						itemLabel="#{confrontosBean.confronto.visitante.time.nome}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Confirmar" update="form:msg carForm"
+					action="#{confrontosBean.escolhaVencedor}"
+					oncomplete="PF('dlgEscVencedor').hide()" />
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	<h:form id="formCd">
+		<p:dialog widgetVar="cd" id="cdConf" showEffect="fade" width="450px"
+			height="150px" hideEffect="fade" header="Confirmação"
+			resizable="false" modal="true" style="float:left" draggable="false">
+			<p:ajax event="close" listener="#{campeonatoBean.novo}" />
+			<p:panelGrid>
+				<i class="pi pi-exclamation-triangle" style="font-size: 24px">Deseja
+					confirmar o confronto?</i>
+				<p:row>
+					<h:outputText value="Horário:" style="font-weight:bold" />
+
+					<p:inputMask id="inputhorario" mask="99:99"
+						style="margin-right:20px" required="true"
+						requiredMessage="Horário deve ser inserido!!"
+						value="#{confrontosBean.confronto.horario}" size="5">
+
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="GMT-3" />
+					</p:inputMask>
+
+					<h:outputText value="Data partida:" style="font-weight:bold" />
+
+					<p:inputMask id="inputdata" mask="99/99/9999" required="true"
+						requiredMessage="Data deve ser inserida!!"
+						value="#{confrontosBean.confronto.dataJogo}" size="8">
+						<f:convertDateTime locale="pt_BR" timeZone="America/Sao_Paulo"
+							pattern="dd/MM/yyyy" />
+					</p:inputMask>
+
+				</p:row>
+				<br />
+				<br />
+				<center>
+					<p:commandButton value="Sim"
+						action="#{confrontosBean.confirmarPlacar}"
+						process="@this inputdata inputhorario" update="form:msg carForm"
+						styleClass="ui-confirmdialog-yes" icon="pi pi-check"
+						oncomplete="PF('cd').hide()" />
+					<p:commandButton value="Não" update="carForm"
+						styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+				</center>
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>

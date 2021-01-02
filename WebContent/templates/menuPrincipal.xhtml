@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<h:body>
+<ui:include src="/templates/barraProgresso.xhtml" />
+	<h:form id="formSide" >
+		<p:menu
+			style="position: fixed;
+  left: 0;
+  height: 100%;z-index:10;"
+			toggleable="true">
+			<p:menuitem title="ADMINISTRADOR">
+				<i class="pi pi-list" style="font-size: 19px">ADMINISTRADOR</i>
+				<i class="pi pi-ellipsis-v"></i>
+				<br />
+				<br />
+			</p:menuitem>
+			<p:submenu label="Agendamento">
+				<p:menuitem value="agenda adversários" url="/testeTCC/agenda-adversarios.jsf?faces-redirect=true" process="@this"
+					icon="pi pi-calendar" />
+			</p:submenu>
+			<p:submenu label="Clientes">
+				<p:menuitem value="Seção clientes" url="/testeTCC/cadastro-clientes.jsf?faces-redirect=true" process="@this"
+					ajax="false" icon="pi pi-users" />
+			</p:submenu>
+			<p:submenu label="Campeonato">
+				<p:menuitem value="Cadastro de times" url="/testeTCC/cadastro-times-camp.jsf?faces-redirect=true" process="@this"
+					icon="pi pi-home" />
+				<p:menuitem value="Principal" url="/testeTCC/pagesCamp/principalCamp.jsf?faces-redirect=true" process="@this"
+					icon="pi pi-star" />
+			</p:submenu>
+			<p:menuitem value="Sair" action="#{loginBean.deslogar}"/>
+		</p:menu>
+	</h:form>
+</h:body>
+</html>

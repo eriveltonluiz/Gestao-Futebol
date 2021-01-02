@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<h:outputStylesheet library="css" name="estilo.css" id="cssSistema" />
+	<style>
+.datagrid {
+	background: url(../resources/img/fund.jpg) no-repeat scroll center;
+	margin-right: 10px;
+	border: 3px solid #000;
+}
+
+.datagrid .des:after {
+	content: "";
+	background: #000;
+	display: block;
+	width: 50px;
+	height: 3px;
+}
+
+.datagrid .des {
+	color: #fec63e;
+	font-style: italic;
+	font-family: Tahoma;
+	font-weight: bold;
+	font-size: 21px;
+	box-shadow: 3px 3px 3px 1px #000;
+	text-shadow: 6px 6px 6px 6px #000;
+}
+</style>
+</h:head>
+
+<h:body>
+	<h:form id="formSide">
+		<p:growl id="msg" life="5500"/>
+		<p:remoteCommand autoRun="true" oncomplete="PF('dlgSorteio').show()"/>
+
+		<p:dialog widgetVar="dlgSorteio" draggable="false" modal="true"
+			closable="false" position="center" resizable="false" width="650px"
+			height="200px" appendTo="@(body)"
+			style="background:url(../resources/img/fundo-grama.jpg) repeat scroll left center;">
+			<center>
+				<p:dataGrid columns="2" var="grupo" value="#{gruposBean.grupos}"
+					style="text-align:center; display:inline-block"
+					styleClass="datagrid">
+					<p:column>
+						<p:commandButton value="#{grupo.descricao}" class="btnPrinc"
+							action="#{gruposBean.alinharTimesNoGrupo}"
+							oncomplete="PF('sidebar').show()" update="formSide:side">
+							<f:setPropertyActionListener value="#{grupo}"
+								target="#{gruposBean.grupo}" />
+						</p:commandButton>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo sorteio" styleClass="btns"
+							oncomplete="recarregarPagina()" />
+
+						<p:commandButton value="Confirmar grupos" styleClass="btns" update="formSide:msg"
+							action="#{gruposBean.inserirTimesNoGrupo}" />
+					</f:facet>
+				</p:dataGrid>
+			</center>
+		</p:dialog>
+
+		<p:sidebar widgetVar="sidebar" baseZIndex="10000" id="side">
+			<h1 style="font-weight: normal">
+				<h:outputText value="#{gruposBean.grupo.descricao}" />
+			</h1>
+
+			<p:dataGrid id="Grupos" var="time" value="#{gruposBean.grupo.times}"
+				columns="1">
+				<h:panelGrid columns="2"
+					style="width:100%; height:75px; float:left; display:inline-block">
+
+					<p:column>
+						<h:graphicImage width="40px" height="40px"
+							value="#{time.fotoIconBase64}"
+							style="box-shadow: 3px 3px 3px 1px #000;margin-right:15px" />
+					</p:column>
+
+					<p:column>
+						<h:outputText class="des" value="#{time.nome}" />
+					</p:column>
+				</h:panelGrid>
+
+			</p:dataGrid>
+		</p:sidebar>
+
+	</h:form>
+	
+	<script>
+function recarregarPagina(){
+	window.location.reload(true);
+}
+</script>
+</h:body>
+</html>

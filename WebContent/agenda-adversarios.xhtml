@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<h:outputStylesheet library="css" name="estilo.css" id="cssSistema" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style>
+		.input{
+			font-weight:bold;
+			text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+			color:Snow;
+			box-shadow: 3px 3px 3px 1px #000;
+		}
+</style>
+</h:head>
+
+<h:body>
+	<script type="text/javascript">
+		PrimeFaces.locales['pt'] = {
+			closeText : 'Fechar',
+			prevText : 'Anterior',
+			nextText : 'Próximo',
+			currentText : 'Começo',
+			monthNames : [ 'Janeiro', 'Fevereiro', 'Marcio', 'Abril', 'Maio',
+					'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+					'Novembro', 'Dezembro' ],
+			monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+					'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+			dayNames : [ 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta',
+					'Sexta', 'Sábado' ],
+			dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' ],
+			dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S', 'S' ],
+			weekHeader : 'Semana',
+			firstDay : 0,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'São Horas',
+			timeText : 'Tempo',
+			hourText : 'Hora',
+			minuteText : 'Minuto',
+			secondText : 'Segundo',
+			ampm : false,
+			month : 'Mês',
+			week : 'Semana',
+			day : 'Dia',
+			allDayText : 'Todo o Dia'
+		};
+	</script>
+
+	<ui:include src="/templates/menuPrincipal.xhtml" />
+	<h:form id="formTimes" styleClass="conteudo">
+		<p:growl autoUpdate="true" id="msg" />
+		<br />
+		<br />
+		<p:panel
+			style="background:url(resources/img/fund_agenda.jpg) no-repeat scroll left center;background-size:100%">
+
+			<p:panelGrid>
+
+				<p:row style="display: inline-block;">
+					<h:outputText value="Agendamento"
+						style="font-weight:bold; font-size:30px; margin-right:50px" />
+
+					<p:outputLabel for="calendar" value="Data: " styleClass="input"/>
+					<p:calendar id="calendar" locale="pt_BR" style="margin-right:50px;margin-left:7px" size="10"
+						value="#{advBean.agendaEsc.data}" pattern="dd/MM/yyyy">
+						<p:ajax event="dateSelect"
+							listener="#{advBean.parametroAgendaData}"
+							update="formTimes:msg formTabela:tableAgenda" process="@this" />
+					</p:calendar>
+
+					<h:outputText value="Horário: " styleClass="input"/>
+					<h:outputText value="#{advBean.agendaTime.mandante.horario}" styleClass="input" style="margin-right:50px">
+						<f:convertDateTime pattern="HH:mm" timeZone="UTC-3"
+							timeStyle="default" />
+					</h:outputText>
+
+					<p:commandButton value="Atualizar preço" styleClass="btns"
+						oncomplete="PF('dialogTarifa').show()" process="@this" />
+
+				</p:row>
+
+			</p:panelGrid>
+
+			<p:panelGrid>
+				<p:row>
+					<h:outputText value="Mandante" />
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="Time: " />
+						<p:selectOneMenu id="comboMand"
+							value="#{advBean.agendaTime.mandante.cliente}"
+							converter="converterClientes">
+							<p:ajax process="@this" event="change"
+								listener="#{advBean.popularCampoCliente}" update="cliente1" />
+							<f:selectItem itemLabel="[Selecione]" noSelectionOption="true" />
+							<f:selectItems value="#{advBean.mandanteItens}" />
+						</p:selectOneMenu>
+
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Cliente: " />
+						<p:inputText id="cliente1" size="18"
+							value="#{advBean.agendaTime.mandante.cliente.nomeUser}"
+							readonly="true" />
+					</p:column>
+
+					<p:column>
+						<p:commandLink process="@this" action="#{advBean.deletarMandante}"
+							update="formTimes formTabela">
+							<center>
+								<p:graphicImage library="img" name="iconexcluir.png"
+									style="width:55px; height:45px" class="images" />
+							</center>
+						</p:commandLink>
+						<h:outputText value="remover da agenda" />
+					</p:column>
+
+					<p:column>
+						<p:commandLink update="formTimes:msg formTabela:tableAgenda"
+							action="#{advBean.salvarMandante}" process="@this">
+							<center>
+								<p:graphicImage library="img" name="cadastro.png"
+									style="width:55px; height:45px" class="images" />
+							</center>
+						</p:commandLink>
+						<h:outputText value="cadastrar da agenda" />
+					</p:column>
+
+				</p:row>
+
+			</p:panelGrid>
+
+			<br />
+
+			<p:panelGrid>
+				<p:row>
+					<h:outputText value="Visitante" />
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="Time: " />
+						<p:selectOneMenu id="comboVisit"
+							value="#{advBean.agendaTime.visitante.cliente}"
+							converter="converterClientes">
+							<p:ajax process="@this" event="change"
+								listener="#{advBean.popularCampoClienteVisit}" update="cliente2" />
+							<f:selectItem itemLabel="[Selecione]" noSelectionOption="true" />
+							<f:selectItems value="#{advBean.visitanteItens}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Cliente: " />
+						<p:inputText id="cliente2" size="18"
+							value="#{advBean.agendaTime.visitante.cliente.nomeUser}"
+							readonly="true" />
+					</p:column>
+
+					<p:column>
+						<p:commandLink process="@this"
+							action="#{advBean.deletarVisitante}"
+							update="formTimes formTabela">
+							<center>
+								<p:graphicImage library="img" name="iconexcluir.png"
+									style="width:55px; height:45px" class="images" />
+							</center>
+						</p:commandLink>
+						<h:outputText value="remover da agenda" />
+					</p:column>
+
+					<p:column>
+						<p:commandLink action="#{advBean.salvarVisitante}" process="@this"
+							update="formTimes formTabela">
+							<center>
+								<p:graphicImage library="img" name="cadastro.png"
+									style="width:55px; height:45px" class="images" />
+							</center>
+						</p:commandLink>
+						<h:outputText value="cadastrar da agenda" />
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+		</p:panel>
+		
+		<p:panel>
+			<h:panelGrid columns="4">
+			<p:column>
+					<p:graphicImage library="img" name="aberto.png"
+						width="32px" height="25px" style="margin-left:120px"/>
+					<h:outputText value="Em aberto" style="margin-right:100px"/>
+				</p:column>
+				
+				<p:column>
+					<p:graphicImage library="img" name="confirm.png"
+						width="32px" height="25px" />
+					<h:outputText value="Confirmado" style="margin-right:100px"/>
+				</p:column>
+				
+				<p:column>
+					<p:graphicImage library="img" name="parcial.png"
+						width="50px" height="30px" />
+					<h:outputText value="$ parcial" style="margin-right:100px"/>
+				</p:column>
+				
+				<p:column>
+					<p:graphicImage library="img" name="cancel-icon.png"
+						width="32px" height="25px" />
+					<h:outputText value="Cancelado"/>
+				</p:column>
+			</h:panelGrid>
+		</p:panel>
+
+	</h:form>
+
+	<h:form>
+		<p:dialog widgetVar="dialogTarifa" id="dlgTarifa" draggable="false"
+			showEffect="explode" hideEffect="clip" resizable="false" modal="true"
+			width="700px" height="500px" dynamic="true">
+
+			<center>
+				<h1>Tarifas</h1>
+			</center>
+			<p:panel>
+				<p:panelGrid columns="2" style="width:100%">
+					<p:outputLabel value="Preço p/horário diurno(R$):" />
+
+					<p:inputNumber value="#{advBean.tarifa.valorHoursDiurno}" />
+
+					<p:outputLabel value="Preço p/horário noturno(R$):" />
+
+					<p:inputNumber value="#{advBean.tarifa.valorHoursNoturno}" />
+
+					<p:outputLabel value="Preço mensal diurno(R$):" />
+
+					<p:inputNumber value="#{advBean.tarifa.valorMensalDiurno}" />
+
+					<p:outputLabel value="Preço mensal noturno(R$):" />
+
+					<p:inputNumber value="#{advBean.tarifa.valorMensalNoturno}" />
+					
+					<p:outputLabel value="Faixa de horários(Período diurno)" style="margin-top:10px"/>
+
+					<p:outputLabel value="Faixa de horários(Período Noturno)" style="margin-top:10px"/>
+
+					<p:inputMask id="inicDiurno" mask="99:99"
+						value="#{advBean.tarifa.horarioInicDiurno}">
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="UTC-3" />
+					</p:inputMask>
+					
+					<p:inputMask mask="99:99"
+						value="#{advBean.tarifa.horarioInicNoturno}" id="inicNoturno">
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="UTC-3" />
+					</p:inputMask>
+
+					<p:inputMask id="termDiurno" mask="99:99"
+						value="#{advBean.tarifa.horarioTerminoDiurno}">
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="UTC-3" />
+					</p:inputMask>
+
+					<p:inputMask mask="99:99"
+						value="#{advBean.tarifa.horarioTerminoNoturno}" id="termNoturno">
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="UTC-3" />
+					</p:inputMask>
+
+
+					<p:watermark for="inicDiurno inicNoturno" value="Inicial" />
+
+					<p:watermark for="termDiurno termNoturno" value="Terminal" />
+
+				</p:panelGrid>
+				
+				<center>
+					<h:panelGroup>
+						<p:commandButton value="Atualizar tarifas" styleClass="btns"
+							actionListener="#{advBean.atualizarTarifas}" process="@form" />
+
+						<p:commandButton value="Voltar" styleClass="btns"
+							oncomplete="PF('dialogTarifa').hide()" />
+					</h:panelGroup>
+					</center>
+
+			</p:panel>
+
+
+		</p:dialog>
+	</h:form>
+
+	<br />
+	<h:form id="formTabela" styleClass="conteudo">
+		<p:dataTable var="confronto" value="#{advBean.agenda}"
+			id="tableAgenda">
+			<br />
+			<p:column headerText="Horário" style="width:80px">
+				<center>
+					<h:outputText value="#{confronto.mandante.horario}"
+						style="font-weight:bold">
+						<f:convertDateTime timeStyle="default" pattern="HH:mm"
+							timeZone="UTC-3" />
+					</h:outputText>
+				</center>
+			</p:column>
+
+			<p:column headerText="Mandante">
+				<center>
+					<h:outputText value="#{confronto.mandante.cliente.nomeTime}"
+						style="font-size:22px; font-style:italic" />
+				</center>
+			</p:column>
+
+			<p:column headerText="" style="width:40px">
+				<center>
+					<h:outputText value="X" style="font-weight:bold" />
+				</center>
+			</p:column>
+
+			<p:column headerText="Visitante">
+				<center>
+					<h:outputText value="#{confronto.visitante.nomeTimeVisit}"
+						style="font-size:22px; font-style:italic" />
+				</center>
+			</p:column>
+
+			<p:column headerText="Status" style="width:40px">
+				<center>
+					<p:graphicImage library="img" name="#{confronto.imagem}"
+						width="32px" height="25px" />
+				</center>
+			</p:column>
+
+			<p:column headerText="Selecionar" style="width:75px">
+				<center>
+					<p:commandLink oncomplete="PF('dialogOpc').show()"
+						disabled="#{confronto.desabilitado}" process="@this">
+						<p:graphicImage library="img" name="infor.png" width="25px"
+							height="25px" styleClass="images" />
+						<f:setPropertyActionListener value="#{confronto}"
+							target="#{advBean.agendaTime}" />
+					</p:commandLink>
+				</center>
+			</p:column>
+		</p:dataTable>
+
+		<p:dialog widgetVar="dialogOpc" id="dlgOpc" draggable="false"
+			showEffect="explode" hideEffect="clip" resizable="false" modal="true"
+			width="550px" height="250px" header="Selecione uma atividade">
+
+			<p:panel>
+				<p:panelGrid columns="3" style="width:100%">
+					<p:commandLink action="#{advBean.carregarTimes}" immediate="true"
+						update="formTimes dlgOpc">
+						<p:graphicImage library="img" name="agend.png" width="100px"
+							height="145px" style="margin:0 auto">
+							<center>
+								<p:outputLabel value="Agendamento" />
+							</center>
+						</p:graphicImage>
+
+					</p:commandLink>
+
+					<p:commandLink actionListener="#{advBean.dadosHorario}"
+						update="formTabela:dlgConfirm formTimes:msg" process="@this">
+						<p:graphicImage library="img" name="calculo.png" width="200px"
+							height="145px">
+							<center>
+								<p:outputLabel value="Pagamento" />
+							</center>
+						</p:graphicImage>
+					</p:commandLink>
+
+					<p:commandLink process="@this"
+						actionListener="#{advBean.verificarHorario}"
+						update="formTabela:dlgCanc formTimes:msg">
+						<p:graphicImage library="img" name="cancel-icon.png" width="100px"
+							height="145px">
+							<center>
+								<p:outputLabel value="Cancelamento" />
+							</center>
+						</p:graphicImage>
+					</p:commandLink>
+				</p:panelGrid>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog widgetVar="dialogConfirm" id="dlgConfirm" draggable="false"
+			showEffect="explode" hideEffect="clip" resizable="false" modal="true"
+			width="600px" height="500px" header="Confirmação de horário">
+			<p:panel>
+				<p:panelGrid columns="2">
+					<p:column>
+						<h2>Mandante</h2>
+						<br />
+						<p:outputLabel value="Time" />
+						<p:inputText
+							value="#{advBean.agendaTime.mandante.cliente.nomeTime}"
+							readonly="true" />
+
+						<p:outputLabel value="Valor horário" />
+						<p:inputNumber value="#{advBean.valorPorHorario}" readonly="true" />
+
+						<p:outputLabel value="Valor pago" />
+						<p:inputNumber id="pagoMand"
+							value="#{advBean.pagMandante.valorPago}" required="true"
+							requiredMessage="Necessário o acréscimo do valor pago mandante">
+							<p:ajax listener="#{advBean.atualizarValorPendenteMand}"
+								event="blur" process="@this"
+								update="formTimes:msg pagoMand valPendenteMand" />
+						</p:inputNumber>
+
+
+						<p:outputLabel value="Valor pendente" />
+						<p:inputNumber id="valPendenteMand"
+							value="#{advBean.pagMandante.valorPendente}" readonly="true" />
+					</p:column>
+
+					<p:column>
+						<h2>Visitante</h2>
+						<br />
+						<p:outputLabel value="Time" />
+						<p:inputText value="#{advBean.agendaTime.visitante.nomeTimeVisit}"
+							readonly="true" />
+
+						<br />
+
+						<p:outputLabel value="Valor horário" />
+						<p:inputNumber value="#{advBean.valorPorHorario}" readonly="true" />
+
+						<br />
+
+						<p:outputLabel value="Valor pago" />
+						<p:inputNumber id="pagoVisit"
+							value="#{advBean.agendaTime.visitante.valorPago}" required="true"
+							requiredMessage="Necessário o acréscimo do valor pago mandante">
+							<p:ajax listener="#{advBean.atualizarValorPendenteVisit}"
+								event="blur" process="@this"
+								update="formTimes:msg pagoVisit valPendenteVisit" />
+						</p:inputNumber>
+
+						<br />
+
+						<p:outputLabel value="Valor pendente" />
+						<p:inputNumber id="valPendenteVisit"
+							value="#{advBean.agendaTime.visitante.valorPendente}"
+							readonly="true" />
+					</p:column>
+
+				</p:panelGrid>
+			</p:panel>
+
+			<center>
+				<p:commandButton value="Confirmar"
+					action="#{advBean.manipularHorario}"
+					oncomplete="PF('dialogOpc').hide()" styleClass="btns"
+					process="@this"
+					update="formTabela:tableAgenda formTabela:dlgConfirm formTimes:msg">
+					<f:setPropertyActionListener value="confirmar"
+						target="#{advBean.alteracaoHorario}" />
+					<p:resetInput target="dlgConfirm" />
+				</p:commandButton>
+
+				<p:commandButton style="margin-left:20px" value="Cancelar"
+					oncomplete="PF('dialogConfirm').hide()" styleClass="btns"
+					process="@this">
+
+					<p:resetInput target="dlgConfirm" />
+				</p:commandButton>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="dialogCanc" id="dlgCanc" draggable="false"
+			showEffect="explode" hideEffect="clip" resizable="false" modal="true"
+			width="550px" height="300px" header="Cancelamento de horário">
+			<p:panel>
+				<p:panelGrid columns="1" style="font-size:21px">
+
+					<p:row>
+						<p:outputLabel value="Horário: " />
+						<h:outputText value="#{advBean.agendaTime.mandante.horario}">
+							<f:convertDateTime pattern="HH:mm" timeZone="UTC-3"
+								timeStyle="default" />
+						</h:outputText>
+
+						<p:outputLabel style="margin-left:100px" value="Data: " />
+						<h:outputText value="#{advBean.agendaTime.agenda.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="UTC(GMT-0)" />
+						</h:outputText>
+					</p:row>
+
+					<p:row>
+						<p:outputLabel value="Mandante: " />
+						<h:outputText style="font-weight:bold"
+							value="#{advBean.agendaTime.mandante.cliente.nomeTime}     X     " />
+
+						<h:outputText style="font-weight:bold"
+							value="#{advBean.agendaTime.visitante.nomeTimeVisit}" />
+						<p:outputLabel value=": Visitante" />
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
+
+			<h1 style="color: red; font-weight: bold; font-style: italic">!Atenção</h1>
+			<h:outputText value="Deseja realmente cancelar o horário?"
+				style="font-weight:bold" />
+			<br />
+			<br />
+
+			<center>
+				<p:commandButton value="Confirmar"
+					action="#{advBean.manipularHorario}"
+					oncomplete="PF('dialogOpc').hide()" styleClass="btns"
+					process="@this"
+					update="formTabela:tableAgenda formTabela:dlgCanc formTimes:msg">
+					<f:setPropertyActionListener value="cancelar"
+						target="#{advBean.alteracaoHorario}" />
+				</p:commandButton>
+
+				<p:commandButton style="margin-left:20px" value="Cancelar"
+					oncomplete="PF('dialogCanc').hide()" styleClass="btns"
+					process="@this" />
+			</center>
+		</p:dialog>
+
+	</h:form>
+
+</h:body>
+</html>

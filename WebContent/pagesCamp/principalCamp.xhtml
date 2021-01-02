@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<style>
+.pn {
+	border: 2px solid #000;
+}
+
+.tabl:nth-of-type(odd) {
+	margin-left: 20px;
+}
+
+.ui-panel-content table {
+	background: url(../resources/img/abscinza.png) no-repeat scroll center;
+	background-size: cover;
+	border: 2px solid #000;
+}
+
+.ui-panel-content div {
+	margin: auto 55px;
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+h1 {
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+	font-family: Geneva;
+	text-transform: uppercase;
+	color: #363636;
+	font-style: italic;
+}
+
+.ui-datagrid-content {
+	background: url(../resources/img/fundoparedao.jpg) repeat scroll left
+		center;
+	background-size: 100%;
+	border: 2px solid;
+}
+
+.imag {
+	cursor: pointer;
+	transition: all 400ms ease;
+	box-shadow: 3px 3px 3px 2px #000;
+	transition: box-shadow 0.2s ease, transform 0.2 ease;
+	width: 110px;
+	height: 110px;
+}
+
+.imag:hover {
+	padding: 1px 8px;
+	height: 145px;
+	width: 145px;
+}
+
+.imag:active {
+	box-shadow: 0 0 0 0 #000, inset 3px 3px 3px #000;
+	transform: translate(3px, 3px);
+}
+
+.btns {
+	margin: 20px;
+	text-align: center;
+	transition: all 400ms ease;
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	border-radius: 0.4em;
+	box-shadow: 3px 3px 3px 1px #000;
+}
+
+.btns:hover {
+	background: rgba(0, 0, 0, 0);
+	border: 3px solid;
+	animation: bounce 1s;
+}
+
+.btns:active {
+	box-shadow: 0 0 0 0 #000, inset 3px 3px 3px #000;
+	transform: translate(3px, 3px);
+}
+</style>
+</h:head>
+
+<h:body>
+	<div id="header">
+		<ui:insert name="header">
+
+			<ui:include src="/templates/menuPrincipal.xhtml" />
+		</ui:insert>
+	</div>
+	<h:form id="formPrinc" style="margin-left:225px">
+		<p:growl life="5500" id="msg" />
+		<p:panel header="Relatório do campeonato" class="pn">
+			<h:panelGrid columns="4">
+				<p:column>
+					<div>
+						<p:commandLink process="@this" update="dialogVermelhos"
+							oncomplete="PF('dlgVermelhos').show()"
+							action="#{principalCampBean.carregarVermelhos}">
+							<p:graphicImage library="img" name="cartaovermelho.png"
+								class="imag" />
+							<center>
+								<p:outputLabel value="Lista de cartões vermelhos" />
+							</center>
+						</p:commandLink>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink process="@this" update="dialogAmarelos"
+							oncomplete="PF('dlgAmarelos').show()"
+							action="#{principalCampBean.carregarAmarelados}">
+							<p:graphicImage library="img" name="cartaoamarelo.png"
+								class="imag">
+							</p:graphicImage>
+							<center>
+								<p:outputLabel value="Lista de cartões amarelos" />
+							</center>
+						</p:commandLink>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink
+							actionListener="#{principalCampBean.carregarArtilharia}"
+							process="@this" oncomplete="PF('dlgGols').show()"
+							update="dialogGols">
+							<p:graphicImage library="img" name="gols.png" class="imag" />
+							<center>
+								<p:outputLabel value="Lista artilheiros" />
+							</center>
+						</p:commandLink>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink action="fase-final?faces-redirect=true">
+							<p:graphicImage library="img" name="fases.png" class="imag" />
+						</p:commandLink>
+						<center>
+							<p:outputLabel value="Fase final" />
+						</center>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink action="tesetCamp.xhtml?faces-redirect=true">
+							<p:graphicImage library="img" name="ass.png" class="imag" />
+						</p:commandLink>
+						<center>
+							<p:outputLabel value="Lançar resultados" />
+						</center>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink action="resultados?faces-redirect=true"
+							process="@this">
+							<p:graphicImage library="img" name="result.png" class="imag" />
+							<center>
+								<p:outputLabel value="Resultados" />
+							</center>
+						</p:commandLink>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink process="@this"
+							action="#{principalCampBean.listaItensGrupos}" id="linkCadRodada"
+							update="formPrinc:msg">
+							<p:graphicImage library="img" name="relogi.png" width="110px"
+								height="110px" class="imag">
+							</p:graphicImage>
+						</p:commandLink>
+						<center>
+							<p:outputLabel value="Cadastro de rodada" />
+						</center>
+					</div>
+				</p:column>
+
+				<p:column>
+					<div>
+						<p:commandLink process="@this"
+							action="#{principalCampBean.listarTimes}">
+							<p:graphicImage library="img" name="time.png" width="110px"
+								height="110px" class="imag" />
+						</p:commandLink>
+						<center>
+							<p:outputLabel value="Times" />
+						</center>
+					</div>
+				</p:column>
+
+			</h:panelGrid>
+		</p:panel>
+
+		<p:dialog widgetVar="dlgRodada" id="dialogRodada" resizable="false"
+			draggable="false" modal="true" height="405px" width="650px"
+			showEffect="explode" hideEffect="clip" dynamic="true"
+			header="Cadastro de rodada">
+
+			<p:ajax event="close" listener="#{campeonatoBean.novo}"
+				update="dialogRodada" />
+
+			<p:fieldset legend="#{principalCampBean.rodada.descricao}">
+				<p:panelGrid style="width:100%" columns="1" id="pnlg">
+					<f:facet name="header">
+						<p:outputLabel value="Grupos" />
+						<p:selectOneMenu style="text-align:left" appendTo="@(body)"
+							id="comboGrupos" value="#{principalCampBean.grupo}"
+							converter="converterGrupos">
+							<p:ajax process="@this" event="change" update="comboMandantes"
+								listener="#{principalCampBean.carregaTimes}" />
+							<f:selectItem itemLabel="Selecione" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{principalCampBean.grupos}" />
+						</p:selectOneMenu>
+					</f:facet>
+
+					<p:column>
+						<center>
+							<p:row>
+								<br />
+								<h:outputText value="Mandante"
+									style="margin-top:20px;font-weight:bold" />
+
+								<p:selectOneMenu appendTo="@(body)"
+									value="#{principalCampBean.mandante}" id="comboMandantes"
+									converter="converterTimes">
+									<p:ajax process="@this" event="change" update="comboVisitantes"
+										listener="#{principalCampBean.removerItem}" />
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems value="#{principalCampBean.times}"
+										id="itensMandantes" />
+								</p:selectOneMenu>
+							</p:row>
+
+							<p:row>
+								<p:outputLabel value="X"
+									style="margin: 20px 20px;font-weight:bold" />
+							</p:row>
+
+							<p:row>
+
+								<p:selectOneMenu appendTo="@(body)"
+									value="#{principalCampBean.visitante}"
+									converter="converterTimes" id="comboVisitantes">
+									<p:ajax process="@this" event="change" update="comboMandantes"
+										listener="#{principalCampBean.removerItemMandante}" />
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItems value="#{principalCampBean.timesVisitantes}" />
+								</p:selectOneMenu>
+								<h:outputText value="Visitante"
+									style="margin-top:20px;font-weight:bold" />
+							</p:row>
+						</center>
+						<br />
+					</p:column>
+					<p:column style="height:100px">
+						<center>
+							<p:row>
+								<br />
+								<h:outputText value="Horário:" style="font-weight:bold" />
+
+								<p:inputMask id="inputhorario" mask="99:99" required="true"
+									requiredMessage="Necessário inserir um horário"
+									value="#{principalCampBean.confronto.horario}" size="10"
+									style="margin-right:20px">
+
+									<f:convertDateTime timeStyle="default" pattern="HH:mm"
+										timeZone="GMT-3" />
+								</p:inputMask>
+							</p:row>
+
+							<p:row>
+								<h:outputText value="Data partida:" style="font-weight:bold" />
+
+								<p:inputMask id="inputdata" mask="99/99/9999" required="true"
+									requiredMessage="Necessário inserir uma data"
+									value="#{principalCampBean.confronto.dataJogo}" size="10">
+									<f:convertDateTime locale="pt_BR" timeZone="GMT-3"
+										pattern="dd/MM/yyyy" />
+								</p:inputMask>
+							</p:row>
+						</center>
+						<br />
+					</p:column>
+
+					<p:column>
+						<center>
+							<p:commandButton value="Incluir jogo" styleClass="btns"
+								style="margin-right:20px;" id="btnT">
+								<f:ajax render="pnlg formPrinc:msg"
+									listener="#{principalCampBean.adicionarConfrontos}"
+									execute="comboMandantes comboVisitantes inputhorario inputdata btnT" />
+
+							</p:commandButton>
+
+							<p:commandButton value="Finalizar rodada" styleClass="btns"
+								process="@this" update="formPrinc:msg formPrinc:dialogRodada"
+								actionListener="#{principalCampBean.confirmarRodada}"
+								style="margin-right:20px;" />
+						</center>
+					</p:column>
+				</p:panelGrid>
+
+			</p:fieldset>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgVermelhos" id="dialogVermelhos"
+			resizable="false" modal="true" draggable="false" width="500px"
+			height="500px">
+			<p:dataTable var="vermelho" value="#{principalCampBean.vermelhos}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+				paginator="true" rows="10" id="tblVerm"
+				emptyMessage="Sem registros de cartões vermelhos"
+				style="text-align:center">
+
+				<f:facet name="{Exporters}">
+					<div style="float: right; padding-top: 5px;">
+						<h:commandLink>
+							<p:graphicImage library="img" name="xlsx.png" width="24" />
+							<p:dataExporter type="xlsxstream" target="tblVerm"
+								fileName="vermelhos" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage library="img" name="pdf.png" width="24" />
+							<p:dataExporter type="pdf" target="tblVerm" fileName="vermelhos" />
+						</h:commandLink>
+					</div>
+				</f:facet>
+				<p:column style="width:50px;">
+					<f:facet name="header">
+						<h:graphicImage library="img" name="cartaovermelho.png"
+							width="35px" height="25px" />
+					</f:facet>
+					<h:outputText value="#{vermelho.qtdCartoesVermelhos}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{vermelho.nome}" />
+				</p:column>
+
+				<p:column headerText="Time">
+					<h:outputText value="#{vermelho.time.nome}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgAmarelos" id="dialogAmarelos"
+			resizable="false" modal="true" draggable="false" width="500px"
+			height="500px">
+			<p:dataTable var="amarelo" value="#{principalCampBean.amarelados}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+				paginator="true" rows="10" id="tblAmar" style="text-align:center"
+				emptyMessage="Sem registros de cartões amarelos">
+
+				<f:facet name="{Exporters}">
+					<div style="float: right; padding-top: 5px;">
+						<h:commandLink>
+							<p:graphicImage library="img" name="xlsx.png" width="24" />
+							<p:dataExporter type="xls" target="tblAmar" fileName="amarelados" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage library="img" name="pdf.png" width="24" />
+							<p:dataExporter type="pdf" target="tblAmar" fileName="amarelados" />
+						</h:commandLink>
+					</div>
+				</f:facet>
+
+				<p:column style="width:50px;">
+					<f:facet name="header">
+						<h:graphicImage library="img" name="cartaoamarelo.png"
+							width="35px" height="25px" />
+					</f:facet>
+					<h:outputText value="#{amarelo.qtdCartoesAmarelos}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{amarelo.nome}" />
+				</p:column>
+
+				<p:column headerText="Time">
+					<h:outputText value="#{amarelo.time.nome}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgGols" id="dialogGols" resizable="false"
+			modal="true" draggable="false" width="500px" height="500px"
+			header="Paredão da Bola">
+			<h1>Artilharia</h1>
+			<p:dataTable var="gol" value="#{principalCampBean.artilharia}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+				paginator="true" rows="10" id="tblGols" style="text-align:center"
+				emptyMessage="Sem registros de gols dos jogadores">
+
+				<f:facet name="{Exporters}">
+					<div style="float: right; padding-top: 5px;">
+						<h:commandLink>
+							<p:graphicImage library="img" name="xlsx.png" width="24" />
+							<p:dataExporter type="xlsxstream" target="tblGols"
+								fileName="artilharia" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage library="img" name="pdf.png" width="24" />
+							<p:dataExporter type="pdf" target="tblGols" fileName="artilharia" />
+						</h:commandLink>
+					</div>
+				</f:facet>
+
+				<p:column style="width:50px;">
+					<f:facet name="header">
+						<h:graphicImage library="img" name="gols.png" width="25px"
+							height="25px" />
+					</f:facet>
+					<h:outputText value="#{gol.gols}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{gol.nome}" />
+				</p:column>
+
+				<p:column headerText="Time">
+					<h:outputText value="#{gol.time.nome}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:dialog>
+
+	</h:form>
+	<h1>Classificação geral</h1>
+
+	<h:form id="formClass" style="margin-left:225px">
+		<p:dataGrid var="grupo" value="#{principalCampBean.tabelas}"
+			columns="2">
+
+			<h:outputText value="#{grupo.descricao}"
+				style="color:#007ad9; font-size: 22px; font-weight:bold;box-shadow: 3px 3px 3px 2px #000; margin-left: 100px;" />
+			<br />
+			<br />
+			<p:dataTable class="tabl" var="time" value="#{grupo.times}"
+				styleClass="width:60px"
+				style="text-align:center;border: none; box-shadow: 3px 3px 3px 2px #000;">
+
+				<p:column headerText="Time"
+					style="width:180px; text-align:left; border-bottom: 2px solid;">
+					<h:outputText value="#{time.indice}º" style="margin-right:25px;" />
+					<h:graphicImage value="#{time.fotoIconBase64}"
+						style="width:25px;height:25px;margin-right:5px" />
+					<h:outputText value="#{time.nome}" />
+				</p:column>
+
+				<p:column headerText="P"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.pontos}" />
+				</p:column>
+
+				<p:column headerText="V"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.vitorias}" />
+				</p:column>
+
+				<p:column headerText="D"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.derrotas}" />
+				</p:column>
+
+				<p:column headerText="E"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.empates}" />
+				</p:column>
+
+				<p:column headerText="GP"
+					style="width:12px;border-bottom: 2px solid">
+					<h:outputText value="#{time.golsPro}" />
+				</p:column>
+
+				<p:column headerText="GC"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.golsContra}" />
+				</p:column>
+
+				<p:column headerText="SG"
+					style="width:12px;border-bottom: 2px solid;background:LightGrey">
+					<h:outputText value="#{time.saldoDeGols}" />
+				</p:column>
+
+			</p:dataTable>
+			<br />
+
+			<f:facet name="footer">
+				<p:commandButton value="Cancelar campeonato" styleClass="btns"
+					oncomplete="PF('confirmEnc').show()">
+					<p:confirm header="Confirmation"
+						message="Deseja confirmar o cancelamento?"
+						icon="pi pi-exclamation-triangle" />
+				</p:commandButton>
+				<p:commandButton value="Concluir fase de grupo" styleClass="btns"
+					oncomplete="PF('dlgMataMata').show()" />
+			</f:facet>
+		</p:dataGrid>
+
+		<p:confirmDialog widgetVar="confirmEnc" global="true"
+			showEffect="fade" appendTo="@(body)" hideEffect="fade">
+			<p:commandButton value="Yes" process="@this"
+				styleClass="ui-confirmdialog-yes"
+				action="#{principalCampBean.anularRegistrosCamp}" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" />
+		</p:confirmDialog>
+
+		<p:dialog widgetVar="dlgMataMata" width="350px" height="150px"
+			modal="true" resizable="false">
+			<h:outputText value="Formato inicial mata mata" />
+			<br/>
+			<center>
+			<p:selectOneMenu required="true" requiredMessage="Necessário inserir um formato!!"
+				value="#{principalCampBean.etapaInicial}">
+				<f:selectItem itemLabel="[Selecione]" noSelectionOption="true" />
+				<f:selectItem itemLabel="Oitavas" itemValue="Oitavas de final" />
+				<f:selectItem itemLabel="Quartas" itemValue="Quartas de final" />
+			</p:selectOneMenu>
+<br/>
+			<p:commandButton styleClass="btns" value="Confirmar" update="formPrinc:msg"
+				action="#{principalCampBean.OrganizarConfMataMata}"
+				oncomplete="PF('dlgMataMata').hide()" />
+				</center>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>
