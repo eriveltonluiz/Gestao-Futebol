@@ -61,6 +61,19 @@ public class LoginBean implements Serializable{
 		}
 	}
 	
+	public void cadastrar() {
+		if(daoControllerLogin.verificarCadastro(login)) { 
+			daoControllerLogin.atualizar(login);
+			Mensagens.msgInfo("Cadastro realizado com sucesso!!!");
+		}else {
+			Mensagens.msgError("Login já cadastrado no sistema!!!");	
+		}
+	}
+	
+	public void setarDados() {
+		login = new Login();
+	}
+	
 	public Login getLogin() {
 		return login;
 	}

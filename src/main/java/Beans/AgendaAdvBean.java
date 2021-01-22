@@ -126,7 +126,7 @@ public class AgendaAdvBean implements Serializable {
 		}
 	}
 
-	public void parametroAgendaData(SelectEvent event) throws ParseException {
+	public void parametroAgendaData(@SuppressWarnings("rawtypes") SelectEvent event) throws ParseException {
 		inicio = true;
 		agendaEsc = new Agenda();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -147,25 +147,27 @@ public class AgendaAdvBean implements Serializable {
 		cal.set(Calendar.MILLISECOND, 0);
 
 		if (dataAtual.equals(cal.getTime()) || dataAtual.before(cal.getTime())) {
-		if (!(daoControllerAgenda.verificarAgendaExistente(dataEscolhida))) {
-			agendaEsc.setData(cal.getTime());
-			agendaEsc = daoControllerAgenda.atualizar(agendaEsc);
-			daoControllerAgenda.criarAgendaPorData(agendaEsc, cal);
+			if (!(daoControllerAgenda.verificarAgendaExistente(dataEscolhida))) {
+				agendaEsc.setData(cal.getTime());
+				agendaEsc = daoControllerAgenda.atualizar(agendaEsc);
+				daoControllerAgenda.criarAgendaPorData(agendaEsc, cal);
+			}
+
+			if (!inicio) {
+				agendaEsc = daoControllerAgenda.retornarRegistroPorData(new Date());
+				agendaEsc.setData(dataEscolhida);
+			} else if (inicio) {
+				agendaEsc = daoControllerAgenda.retornarRegistroPorData(dataEscolhida);
+				agendaEsc.setData(dataEscolhida);
+				init();
+			}
+			Mensagens.msgInfo("Agenda para data: " + new SimpleDateFormat("dd/MM/yyyy").format(dataEscolhida)
+					+ "carregada com sucesso");
+
+		} else {
+			Mensagens.msgError("Data escolhida já foi efetuada!!");
 		}
 
-		if (!inicio) {
-			agendaEsc = daoControllerAgenda.retornarRegistroPorData(new Date());
-			agendaEsc.setData(dataEscolhida);
-		} else if (inicio) {
-			agendaEsc = daoControllerAgenda.retornarRegistroPorData(dataEscolhida);
-			agendaEsc.setData(dataEscolhida);
-			init();
-		}
-		Mensagens.msgInfo("Agenda para data: " + new SimpleDateFormat("dd/MM/yyyy").format(dataEscolhida)
-				+ "carregada com sucesso");
-		
-		} else { Mensagens.msgError("Data escolhida já foi efetuada!!"); }
-		 
 		System.out.println(dataEscolhida);
 		System.out.println(cal.get(Calendar.DAY_OF_WEEK));
 	}
@@ -182,7 +184,18 @@ public class AgendaAdvBean implements Serializable {
 				if (agendaTime != null && agendaTime.getMandante().getCliente().getNomeTime() != null) {
 					clienteAux = (Cliente) agendaTime.getMandante().getCliente().clone();
 					mandante = agendaTime.getMandante();
+					
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(mandante.getHorario());
+					cal.add(Calendar.HOUR_OF_DAY, 3);
+					
+					mandante.setHorario(cal.getTime());
 					mandante = daoControllerMandanteAgenda.atualizar(mandante);
+					
+					cal.add(Calendar.HOUR_OF_DAY, -3);
+					mandante.setHorario(cal.getTime());
+					
+					agendaTime.getMandante().setHorario(cal.getTime());
 					mandNaoInserido = false;
 					Mensagens.msgInfo("salvo com sucesso!!");
 				} else {
@@ -259,7 +272,18 @@ public class AgendaAdvBean implements Serializable {
 				agendaTime.getMandante().setCliente(null);
 				agendaTime.setCliente(null);
 				mandante = agendaTime.getMandante();
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(mandante.getHorario());
+				cal.add(Calendar.HOUR_OF_DAY, 3);
+				
+				mandante.setHorario(cal.getTime());
 				mandante = daoControllerMandanteAgenda.atualizar(mandante);
+				
+				cal.add(Calendar.HOUR_OF_DAY, -3);
+				mandante.setHorario(cal.getTime());
+				
+				agendaTime.getMandante().setHorario(cal.getTime());
 				agendaTime.getVisitante().setCliente(null);
 				agendaTime.getVisitante().setNomeTimeVisit(null);
 				daoControllerVisitanteAgenda.remover(agendaTime.getVisitante());

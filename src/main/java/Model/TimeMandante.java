@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class TimeMandante implements Serializable{
@@ -20,6 +22,7 @@ public class TimeMandante implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idMandante;
 
+	@Temporal(TemporalType.TIME)
 	private Date horario;
 
 	private String dia;

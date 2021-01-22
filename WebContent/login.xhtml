@@ -6,151 +6,147 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<style>
-		* { box-sizing: border-box; }
+* {
+	box-sizing: border-box;
+}
 
 body {
-	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-  color:white;
-  font-size:12px;
-  background:#333 url(/images/classy_fabric.png);
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+		"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	color: white;
+	font-size: 12px;
+	background: #333 url(/images/classy_fabric.png);
 }
 
 #formLogin {
- 	background:#111; 
-  width:300px;
-  margin:30px auto;
-  border-radius:0.4em;
-  border:1px solid #191919;
-  overflow:hidden;
-  position:relative;
-  box-shadow: 0 5px 10px 5px rgba(0,0,0,0.2);
+	background: #111;
+	width: 300px;
+	margin: 30px auto;
+	border-radius: 0.4em;
+	border: 1px solid #191919;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0 5px 10px 5px rgba(0, 0, 0, 0.2);
 }
 
 #formLogin:after {
-  content:"";
-  display:block;
-  position:absolute;
-  height:1px;
-  width:100px;
-  left:20%;
-  background:linear-gradient(left, #111, #444, #b6b6b8, #444, #111);
-  top:0;
+	content: "";
+	display: block;
+	position: absolute;
+	height: 1px;
+	width: 100px;
+	left: 20%;
+	background: linear-gradient(left, #111, #444, #b6b6b8, #444, #111);
+	top: 0;
 }
 
 #formLogin:before {
- 	content:"";
-  display:block;
-  position:absolute;
-  width:8px;
-  height:5px;
-  border-radius:50%;
-  left:34%;
-  top:-7px;
-  box-shadow: 0 0 6px 4px #fff;
+	content: "";
+	display: block;
+	position: absolute;
+	width: 8px;
+	height: 5px;
+	border-radius: 50%;
+	left: 34%;
+	top: -7px;
+	box-shadow: 0 0 6px 4px #fff;
 }
 
 .inset {
- 	padding:20px; 
-  border-top:1px solid #19191a;
+	padding: 20px;
+	border-top: 1px solid #19191a;
 }
 
 h1 {
-  font-size:18px;
-  text-shadow:0 1px 0 black;
-  text-align:center;
-  padding:15px 0;
-  border-bottom:1px solid rgba(0,0,0,1);
-  position:relative;
+	font-size: 18px;
+	text-shadow: 0 1px 0 black;
+	text-align: center;
+	padding: 15px 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 1);
+	position: relative;
 }
 
 h1:after {
- 	content:"";
-  display:block;
-  width:250px;
-  height:100px;
-  position:absolute;
-  top:0;
-  left:50px;
-  pointer-events:none;
-  transform:rotate(70deg);
-  background:linear-gradient(50deg, rgba(255,255,255,0.15), rgba(0,0,0,0));
-  
+	content: "";
+	display: block;
+	width: 250px;
+	height: 100px;
+	position: absolute;
+	top: 0;
+	left: 50px;
+	pointer-events: none;
+	transform: rotate(70deg);
+	background: linear-gradient(50deg, rgba(255, 255, 255, 0.15),
+		rgba(0, 0, 0, 0));
 }
 
 .label {
- 	color:#666;
-  display:block;
-  padding-bottom:9px;
+	color: #666;
+	display: block;
+	padding-bottom: 9px;
 }
 
-.inputText,
-.inputPass {
- 	width:100%;
-  padding:8px 5px;
-  background:linear-gradient(#1f2124, #27292c);
-  border:1px solid #222;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.1);
-  border-radius:0.3em;
-  margin-bottom:20px;
+.inputText, .inputPass {
+	width: 100%;
+	padding: 8px 5px;
+	background: linear-gradient(#1f2124, #27292c);
+	border: 1px solid #222;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+	border-radius: 0.3em;
+	margin-bottom: 20px;
 }
 
-.labelRenember{
- 	color:white;
-  display:inline-block;
-  padding-bottom:0;
-  padding-top:5px;
+.labelRenember {
+	color: white;
+	display: inline-block;
+	padding-bottom: 0;
+	padding-top: 5px;
 }
 
 .inputCheck {
- 	display:inline-block;
-  vertical-align:top;
+	display: inline-block;
+	vertical-align: top;
 }
 
 .p-container {
- 	padding:0 20px 20px 20px; 
+	padding: 0 20px 20px 20px;
 }
 
 .p-container:after {
- 	clear:both;
-  display:table;
-  content:"";
+	clear: both;
+	display: table;
+	content: "";
 }
 
 .p-container span {
-  display:block;
-  float:left;
-  color:#0d93ff;
-  padding-top:8px;
+	display: block;
+	float: left;
+	color: #0d93ff;
+	padding-top: 8px;
 }
 
 .submit {
- 	padding:5px 20px;
-  border:1px solid rgba(0,0,0,0.4);
-  text-shadow:0 -1px 0 rgba(0,0,0,0.4);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.3),
-    inset 0 10px 10px rgba(255,255,255,0.1);
-  border-radius:0.3em;
-  background:#0184ff;
-  color:white;
-  float:right;
-  font-weight:bold;
-  cursor:pointer;
-  font-size:13px;
+	padding: 5px 20px;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 10px 10px
+		rgba(255, 255, 255, 0.1);
+	border-radius: 0.3em;
+	background: #0184ff;
+	color: white;
+	float: right;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 13px;
 }
 
 .submit:hover {
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.3),
-    inset 0 -10px 10px rgba(255,255,255,0.1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -10px 10px
+		rgba(255, 255, 255, 0.1);
 }
 
-.inputText:hover,
-.inputPass:hover,
-.label:hover ~ .inputText,
-.label:hover ~ .inputPass {
- 	background:#27292c;
+.inputText:hover, .inputPass:hover, .label:hover ~ .inputText, .label:hover 
+	 ~ .inputPass {
 }
 
 .btns {
@@ -168,7 +164,7 @@ h1:after {
 	border: 3px solid;
 	animation: bounce 1s;
 }
-	</style>
+</style>
 </h:head>
 
 <h:body>
@@ -177,26 +173,63 @@ h1:after {
 			style="width:90px;height:90px" />
 	</center>
 	<h:form id="formLogin">
-		<p:growl id="msg" life="5500"/>
+		<p:growl id="msg" life="5500" />
 		<h1>Paredão da Bola</h1>
 		<p:panelGrid>
-		<div class="inset">
-			<p>
-				<p:outputLabel styleClass="label" value="USUÁRIO"/>
-				<p:inputText value="#{loginBean.login.usuario}" required="true"
-					styleClass="inputText" id="usuario" />
+			<div class="inset">
+				<p>
+					<p:outputLabel styleClass="label" value="USUÁRIO" />
+					<p:inputText value="#{loginBean.login.usuario}" requiredMessage="Necessário o usuário" required="true"
+						styleClass="inputText" id="usuario" />
+				</p>
+				<p>
+					<p:outputLabel styleClass="label" value="SENHA" />
+					<p:password value="#{loginBean.login.senha}" required="true"
+						styleClass="inputPass" id="senha" requiredMessage="Necessário a senha"/>
+				</p>
+			</div>
+			<p class="p-container">
+				<p:commandButton action="#{loginBean.logar}" id="go"
+					process="@this senha usuario" styleClass="btns" value="Login"
+					update="formLogin" />
+
+				<p:commandButton oncomplete="PF('dlgCadastro').show()"
+					action="#{loginBean.logar}" id="but" styleClass="btns"
+					value="Cadastrar" update="formLogin:dialogCadastro" />
 			</p>
-			<p>
-				<p:outputLabel styleClass="label" value="SENHA"/>
-				<p:password value="#{loginBean.login.senha}" required="true"
-					styleClass="inputPass" id="senha" />
-			</p>
-		</div>
-		<p class="p-container">
-			<p:commandButton action="#{loginBean.logar}" id="go" process="@this senha usuario"
-				styleClass="btns" value="Login" update="formLogin"/>
-		</p>
 		</p:panelGrid>
+
+		<p:dialog modal="true" resizable="false" width="370px" height="370px"
+			id="dialogCadastro" widgetVar="dlgCadastro" draggable="false" header="Cadastro">
+
+			<p:panelGrid>
+			<div class="inset">
+					<p>
+						<p:outputLabel styleClass="label" value="USUÁRIO" />
+						<p:inputText value="#{loginBean.login.usuario}" required="true"
+							styleClass="inputText" id="usuarioCad" requiredMessage="Necessário o usuário"/>
+					</p>
+					<p>
+						<p:outputLabel styleClass="label" value="SENHA" />
+						<p:password value="#{loginBean.login.senha}" requiredMessage="Necessário a senha" required="true"
+							styleClass="inputPass" id="senhaCad" />
+					</p>
+
+					<p>
+						<p:outputLabel styleClass="label" value="EMAIL" />
+						<p:inputText type="email" value="#{loginBean.login.email}"
+							required="true" styleClass="inputText" id="email" requiredMessage="Necessário o email"/>
+					</p>
+
+					<h:panelGroup>
+					<div style="text-align:center">
+						<p:commandButton action="#{loginBean.cadastrar}" value="Efetuar cadastro" styleClass="btns"
+							process="@this usuarioCad senhaCad email" update="formLogin:msg dialogCadastro"/>
+					</div>
+					</h:panelGroup>
+					</div>
+			</p:panelGrid>
+		</p:dialog>
 	</h:form>
 </h:body>
 

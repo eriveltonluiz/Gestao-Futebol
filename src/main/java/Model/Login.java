@@ -18,6 +18,7 @@ public class Login implements Serializable{
 	
 	private String usuario;
 	private String senha;
+	private String email;
 	
 	public Long getId() {
 		return id;
@@ -66,6 +67,14 @@ public class Login implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	
