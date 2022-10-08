@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.junit.Test;
 
-import Daos.Dao;
-import Daos.DaoJdbc;
-import Daos.DaoJogador;
-import Model.Agenda;
-import Model.AgendamentoTimes;
-import Model.CampMandante;
-import Model.CampVisitante;
-import Model.Cliente;
-import Model.Confrontos;
-import Model.Grupo;
-import Model.Jogador;
-import Model.Rodada;
-import Model.TimeCamp;
-import Model.TimeMandante;
-import Model.TimeVisitante;
+import br.com.erivelton.canchafut.dao.Dao;
+import br.com.erivelton.canchafut.dao.DaoJdbc;
+import br.com.erivelton.canchafut.dao.DaoJogador;
+import br.com.erivelton.canchafut.model.Agenda;
+import br.com.erivelton.canchafut.model.AgendamentoTimes;
+import br.com.erivelton.canchafut.model.CampMandante;
+import br.com.erivelton.canchafut.model.CampVisitante;
+import br.com.erivelton.canchafut.model.Cliente;
+import br.com.erivelton.canchafut.model.Confrontos;
+import br.com.erivelton.canchafut.model.Grupo;
+import br.com.erivelton.canchafut.model.Jogador;
+import br.com.erivelton.canchafut.model.Rodada;
+import br.com.erivelton.canchafut.model.TimeCamp;
+import br.com.erivelton.canchafut.model.TimeMandante;
+import br.com.erivelton.canchafut.model.TimeVisitante;
 import junit.framework.TestCase;
 
 public class testMain extends TestCase{

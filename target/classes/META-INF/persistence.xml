@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="testeTCC">
-	<class>Model.Agenda</class>
-	<class>Model.Tarifa</class>
-	<class>Model.Cliente</class>
-	<class>Model.AgendamentoTimes</class>
-	<class>Model.TimeMandante</class>
-	<class>Model.TimeVisitante</class>
-	<class>Model.PagMandante</class>
-	<class>Model.CampMandante</class>
-	<class>Model.CampVisitante</class>
-	<class>Model.TimeCamp</class>
-	<class>Model.Grupo</class>
-	<class>Model.Jogador</class>
-	<class>Model.Mand_Visit_TimePK</class>
-	<class>Model.Mand_Visit_TornPK</class>
-	<class>Model.Rodada</class>
-	<class>Model.GolsPartidaMand</class>
-	<class>Model.GolsPartidaVisit</class>
-	<class>Model.AmarelosPartidaMand</class>
-	<class>Model.AmarelosPartidaVisit</class>
-	<class>Model.VermelhosPartidaMand</class>
-	<class>Model.VermelhosPartidaVisit</class>
-	<class>Model.Confrontos</class>
-	<class>Model.ConfrontosTorn</class>
-	<class>Model.Login</class>
-	<class>Model.EtapaMataMata</class>
-	<class>Model.ConfrontosMataMata</class>
+	<class>br.com.erivelton.canchafut.model.Agenda</class>
+	<class>br.com.erivelton.canchafut.model.Tarifa</class>
+	<class>br.com.erivelton.canchafut.model.Cliente</class>
+	<class>br.com.erivelton.canchafut.model.AgendamentoTimes</class>
+	<class>br.com.erivelton.canchafut.model.TimeMandante</class>
+	<class>br.com.erivelton.canchafut.model.TimeVisitante</class>
+	<class>br.com.erivelton.canchafut.model.PagMandante</class>
+	<class>br.com.erivelton.canchafut.model.CampMandante</class>
+	<class>br.com.erivelton.canchafut.model.CampVisitante</class>
+	<class>br.com.erivelton.canchafut.model.TimeCamp</class>
+	<class>br.com.erivelton.canchafut.model.Grupo</class>
+	<class>br.com.erivelton.canchafut.model.Jogador</class>
+	<class>br.com.erivelton.canchafut.model.Mand_Visit_TimePK</class>
+	<class>br.com.erivelton.canchafut.model.Mand_Visit_TornPK</class>
+	<class>br.com.erivelton.canchafut.model.Rodada</class>
+	<class>br.com.erivelton.canchafut.model.GolsPartidaMand</class>
+	<class>br.com.erivelton.canchafut.model.GolsPartidaVisit</class>
+	<class>br.com.erivelton.canchafut.model.AmarelosPartidaMand</class>
+	<class>br.com.erivelton.canchafut.model.AmarelosPartidaVisit</class>
+	<class>br.com.erivelton.canchafut.model.VermelhosPartidaMand</class>
+	<class>br.com.erivelton.canchafut.model.VermelhosPartidaVisit</class>
+	<class>br.com.erivelton.canchafut.model.Confrontos</class>
+	<class>br.com.erivelton.canchafut.model.ConfrontosTorn</class>
+	<class>br.com.erivelton.canchafut.model.Login</class>
+	<class>br.com.erivelton.canchafut.model.EtapaMataMata</class>
+	<class>br.com.erivelton.canchafut.model.ConfrontosMataMata</class>
 	
 	<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>

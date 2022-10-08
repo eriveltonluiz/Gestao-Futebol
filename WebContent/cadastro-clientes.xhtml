@@ -31,17 +31,17 @@
 				<h:panelGrid columns="4" id="cadClientes">
 
 					<h:outputText value="ID:" style="margin-left: 150px" />
-					<p:inputText value="#{clienteBean.cliente.idCliente}"
+					<p:inputText value="#{clienteBean.clienteRequest.id}"
 						readonly="true" disabled="true" />
 
 					<h:outputText value="Time:" style="margin-left: 150px" />
-					<p:inputText value="#{clienteBean.cliente.nomeTime}" />
+					<p:inputText value="#{clienteBean.clienteRequest.nomeTime}" />
 
 					<h:outputText value="Nome:" style="margin-left: 150px" />
-					<p:inputText value="#{clienteBean.cliente.nomeUser}" />
+					<p:inputText value="#{clienteBean.clienteRequest.nomeUser}" />
 
 					<h:outputText value="Plano horário:" style="margin-left: 75px" />
-					<p:inputText value="#{clienteBean.cliente.planoHorario}" />
+					<p:inputText value="#{clienteBean.clienteRequest.planoHorario}" />
 
 				</h:panelGrid>
 
@@ -86,7 +86,7 @@
 				</f:facet>
 
 				<h:outputText value="ID:" />
-				<h:outputText value="#{client.idCliente}" />
+				<h:outputText value="#{client.id}" />
 
 				<h:outputText value="Nome" />
 				<h:outputText value="#{client.nomeUser}" />
@@ -102,7 +102,7 @@
 						<p:panelGrid columns="3">
 							<p:column headerText="Alterar" style="width:65px">
 								<p:commandLink id="btnEdit" styleClass="top"
-									actionListener="#{clienteBean.editar}">
+									action="#{clienteBean.editar}" update="formCadCl">
 									<center>
 										<h:graphicImage id="imgEdit"
 											url="resources/img/icon-editar.png" width="40px"
@@ -111,14 +111,14 @@
 											value="Editar cliente" position="top" hideEffect="explode" />
 									</center>
 									<f:setPropertyActionListener value="#{client}"
-										target="#{clienteBean.cliente}" />
+										target="#{clienteBean.clienteRequest}" />
 									<p:ajax process="btnEdit" update="formCadCl" />
 								</p:commandLink>
 							</p:column>
 
 							<p:column headerText="Excluir" style="width:65px">
 								<p:commandLink id="btnDel" styleClass="top"
-									actionListener="#{clienteBean.deletar}">
+									action="#{clienteBean.deletar}" update="formCarou">
 									<center>
 										<h:graphicImage id="imgDel"
 											url="resources/img/iconexcluir.png" width="40px"
@@ -127,7 +127,7 @@
 											value="Deletar cliente" position="top" hideEffect="explode" />
 									</center>
 									<f:setPropertyActionListener value="#{client}"
-										target="#{clienteBean.cliente}" />
+										target="#{clienteBean.clienteRequest}" />
 									<p:ajax process="btnDel" update="formCarou" />
 								</p:commandLink>
 							</p:column>
@@ -145,7 +145,7 @@
 											hideEffect="explode" />
 									</center>
 									<f:setPropertyActionListener value="#{client}"
-										target="#{clienteBean.cliente}" />
+										target="#{clienteBean.clienteRequest}" />
 								</p:commandLink>
 							</p:column>
 						</p:panelGrid>
@@ -167,21 +167,21 @@
 						<p:column>
 							<h:outputText value="Time:" />
 							<br />
-							<h:outputText value="#{clienteBean.cliente.nomeTime}"
+							<h:outputText value="#{clienteBean.clienteRequest.nomeTime}"
 								style="margin-right: 50px; font-weight:bold" />
 						</p:column>
 
 						<p:column>
 							<h:outputText value="Cliente:" />
 							<br />
-							<h:outputText value="#{clienteBean.cliente.nomeUser}"
+							<h:outputText value="#{clienteBean.clienteRequest.nomeUser}"
 								style="margin-right: 50px; font-weight:bold" />
 						</p:column>
 
 						<p:column>
 							<h:outputText value="Plano de horário:" />
 							<br />
-							<h:outputText value="#{clienteBean.cliente.planoHorario}" style="font-weight:bold"/>
+							<h:outputText value="#{clienteBean.clienteRequest.planoHorario}" style="font-weight:bold"/>
 						</p:column>
 
 						<p:column>

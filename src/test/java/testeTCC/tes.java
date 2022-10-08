@@ -6,16 +6,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import Daos.Dao;
-import Daos.DaoConfronto;
-import Daos.DaoJdbc;
-import Daos.DaoJogador;
-import Model.AgendamentoTimes;
-import Model.Cliente;
-import Model.Grupo;
-import Model.Jogador;
-import Model.PagMandante;
-import Model.TimeCamp;
+import br.com.erivelton.canchafut.dao.Dao;
+import br.com.erivelton.canchafut.dao.DaoConfronto;
+import br.com.erivelton.canchafut.dao.DaoJogador;
+import br.com.erivelton.canchafut.model.AgendamentoTimes;
+import br.com.erivelton.canchafut.model.Grupo;
+import br.com.erivelton.canchafut.model.Jogador;
+import br.com.erivelton.canchafut.model.TimeCamp;
 
 public class tes {
 
@@ -81,20 +78,20 @@ public class tes {
 		//List<AgendamentoTimes> list1 = daoe.listarAgenda();
 	}
 	
-	@Test    //importante
-	public void testPendJdbc() throws Exception {
-		DaoJdbc dao = new DaoJdbc();
-		Cliente cliente = new Cliente();
-		cliente.setIdCliente(1L);
-		//List<AgendamentoTimes> list1 = daoe.listarAgenda();
-		List<PagMandante> list = dao.listaPendencias(cliente);
-		
-		for (PagMandante ag : list) {
-			System.out.println(ag.getIdPagMandante());
-			System.out.print(ag.getValorPago() + ", ");
-			System.out.print(ag.getValorPendente() + ", ");
-		
-			System.out.println("-------");
-		}
-	}
+//	@Test    //importante
+//	public void testPendJdbc() throws Exception {
+//		DaoJdbc dao = new DaoJdbc();
+//		Cliente cliente = new Cliente();
+//		cliente.setIdCliente(1L);
+//		//List<AgendamentoTimes> list1 = daoe.listarAgenda();
+//		List<PagMandante> list = dao.listaPendencias(cliente);
+//		
+//		for (PagMandante ag : list) {
+//			System.out.println(ag.getIdPagMandante());
+//			System.out.print(ag.getValorPago() + ", ");
+//			System.out.print(ag.getValorPendente() + ", ");
+//		
+//			System.out.println("-------");
+//		}
+//	}
 }
